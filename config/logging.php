@@ -91,6 +91,20 @@ return [
             'level' => env('LOG_LEVEL', 'debug'),
         ],
 
+        'api_info_log' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/api/info.log'),
+            'level' => 'info',
+            'days' => 180,
+        ],
+
+        'api_error_log' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/api/error.log'),
+            'level' => 'error',
+            'days' => 180,
+        ],
+
         'null' => [
             'driver' => 'monolog',
             'handler' => NullHandler::class,

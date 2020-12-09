@@ -4,6 +4,8 @@ namespace App\Helper;
 
 class ModelHelper
 {
+    protected $dir = '\App\Models\%s%s\%s\%s';
+
     public function createModelService($service, $version = '')
     {
         try {
@@ -11,7 +13,8 @@ class ModelHelper
         } catch (\Exception $e) {
             app()->singleton($service, function ($app) use ($service, $version) {
                 [$dir, $file] = explode(':', $service);
-                $class = "\App\Models\{$dir}" . ($version ?: "\{$version}\\") . "\Service\{$file}";
+                $version = $version ? '\\' . $version . '\\' : '';
+                $class = sprintf($this->dir, $dir, $version, 'Service', $file);
 
                 return new $class();
             });
@@ -27,7 +30,8 @@ class ModelHelper
         } catch (\Exception $e) {
             app()->singleton($service, function ($app) use ($service, $version) {
                 [$dir, $file] = explode(':', $service);
-                $class = "\App\Models\{$dir}" . ($version ?: "\{$version}\\") . "\Dao\{$file}";
+                $version = $version ? '\\' . $version . '\\' : '';
+                $class = sprintf($this->dir, $dir, $version, 'Dao', $file);
 
                 return new $class();
             });

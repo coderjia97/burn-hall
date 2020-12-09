@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Helper\ModelsHelper;
 use Illuminate\Database\Eloquent\Model;
 
 class BaseModel extends Model
