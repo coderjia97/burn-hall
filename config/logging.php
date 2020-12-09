@@ -91,20 +91,6 @@ return [
             'level' => env('LOG_LEVEL', 'debug'),
         ],
 
-        'api_info_log' => [
-            'driver' => 'single',
-            'path' => storage_path('logs/api/info.log'),
-            'level' => 'info',
-            'days' => 180,
-        ],
-
-        'api_error_log' => [
-            'driver' => 'single',
-            'path' => storage_path('logs/api/error.log'),
-            'level' => 'error',
-            'days' => 180,
-        ],
-
         'null' => [
             'driver' => 'monolog',
             'handler' => NullHandler::class,
@@ -112,6 +98,28 @@ return [
 
         'emergency' => [
             'path' => storage_path('logs/laravel.log'),
+        ],
+
+        'api_info_log' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/api/info.log'),
+            'level' => 'info',
+            'days' => 180,
+        ],
+        'api_error_log' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/api/error.log'),
+            'level' => 'error',
+            'days' => 180,
+        ],
+
+        'sql' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/sql/sql.log'),
+        ],
+        'slow_sql' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/sql/slow-sql.log'),
         ],
     ],
 
