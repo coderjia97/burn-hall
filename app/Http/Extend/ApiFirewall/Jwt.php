@@ -1,6 +1,6 @@
 <?php
 /**
- * Sunny 2020/12/14 下午4:42
+ * Sunny 2020/12/14 下午4:56
  * ogg sit down and start building bugs.
  * Author: Ogg <baoziyoo@gmail.com>
  */
@@ -13,7 +13,6 @@ class Jwt implements Firewall
 {
     public function handle(Request $request)
     {
-        return true;
         if (config('app.apiAccept', '') !== $request->headers->get('accept')) {
             return false;
         }

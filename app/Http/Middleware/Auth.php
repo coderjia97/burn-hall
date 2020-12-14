@@ -1,6 +1,6 @@
 <?php
 /**
- * Sunny 2020/12/14 下午1:51
+ * Sunny 2020/12/14 下午4:56
  * ogg sit down and start building bugs.
  * Author: Ogg <baoziyoo@gmail.com>
  */
@@ -21,13 +21,13 @@ class Auth
     {
         if ($this->checkWhitelists($request->getRequestUri())) {
             foreach (config('apiFirewall') as $firewall) {
-                if (!(new $firewall())->handle($request)) {
-                    throw new AuthException(AuthException::TOKEN_EXPIRED);
+                if ((new $firewall())->handle($request)) {
+                    return $next($request);
                 }
             }
         }
 
-        return $next($request);
+        throw new AuthException(AuthException::TOKEN_EXPIRED);
     }
 
     private function checkWhitelists($url): bool
