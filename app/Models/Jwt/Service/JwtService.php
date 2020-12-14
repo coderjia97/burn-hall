@@ -1,11 +1,16 @@
 <?php
+/**
+ * Sunny 2020/12/14 下午1:51
+ * ogg sit down and start building bugs.
+ * Author: Ogg <baoziyoo@gmail.com>
+ */
 
 namespace App\Models\Jwt\Service;
 
 use App\Models\BaseModel;
 use Firebase\JWT\JWT as FirebaseJWT;
 
-class Jwt extends BaseModel
+class JwtService extends BaseModel
 {
     public function generateAssetsTokenByGuid($guid)
     {

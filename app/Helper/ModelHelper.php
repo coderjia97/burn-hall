@@ -1,4 +1,9 @@
 <?php
+/**
+ * Sunny 2020/12/14 下午1:51
+ * ogg sit down and start building bugs.
+ * Author: Ogg <baoziyoo@gmail.com>
+ */
 
 namespace App\Helper;
 
@@ -6,7 +11,7 @@ class ModelHelper
 {
     protected $dir = '\App\Models\%s%s\%s\%s';
 
-    public function createModelService($service, $version = '')
+    public function getService($service, $version = '')
     {
         try {
             return resolve($service);
@@ -23,7 +28,7 @@ class ModelHelper
         }
     }
 
-    public function createModelDao($service, $version = '')
+    public function getDao($service, $version = '')
     {
         try {
             return resolve($service);
@@ -38,14 +43,5 @@ class ModelHelper
 
             return resolve($service);
         }
-    }
-
-    public function transformArray($query): array
-    {
-        if (null === $query) {
-            return [];
-        }
-
-        return $query->toArray();
     }
 }

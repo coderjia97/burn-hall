@@ -1,4 +1,9 @@
 <?php
+/**
+ * Sunny 2020/12/14 下午1:51
+ * ogg sit down and start building bugs.
+ * Author: Ogg <baoziyoo@gmail.com>
+ */
 
 namespace App\Http\Controllers;
 
@@ -11,8 +16,8 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
-    protected function getModel($service)
+    protected function getService($service)
     {
-        return app('modelHelper')->createModelService($service);
+        return app('modelHelper')->getService($service);
     }
 }

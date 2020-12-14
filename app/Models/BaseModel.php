@@ -1,4 +1,9 @@
 <?php
+/**
+ * Sunny 2020/12/14 下午1:51
+ * ogg sit down and start building bugs.
+ * Author: Ogg <baoziyoo@gmail.com>
+ */
 
 namespace App\Models;
 
@@ -6,14 +11,17 @@ use Illuminate\Database\Eloquent\Model;
 
 class BaseModel extends Model
 {
-    const CREATED_AT = 'createdTime';
-    const UPDATED_AT = 'updatedTime';
+    public const CREATED_AT = 'createTime';
+    public const UPDATED_AT = 'updateTime';
 
-    protected $dateFormat = 'U';
-
-    public function createModelService($service, $version = '')
+    public function getService($service, $version = '')
     {
-        return app('modelHelper')->createModelService($service, $version);
+        return app('modelHelper')->getService($service, $version);
+    }
+
+    public function getDao($dao, $version = '')
+    {
+        return app('modelHelper')->getDao($dao, $version);
     }
 
     public function transformArray($query)

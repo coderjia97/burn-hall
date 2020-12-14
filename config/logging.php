@@ -1,4 +1,9 @@
 <?php
+/**
+ * Sunny 2020/12/14 下午1:51
+ * ogg sit down and start building bugs.
+ * Author: Ogg <baoziyoo@gmail.com>
+ */
 
 use Monolog\Handler\NullHandler;
 use Monolog\Handler\StreamHandler;
@@ -51,7 +56,7 @@ return [
             'driver' => 'daily',
             'path' => storage_path('logs/laravel.log'),
             'level' => env('LOG_LEVEL', 'debug'),
-            'days' => 14,
+            'days' => 7,
         ],
 
         'slack' => [

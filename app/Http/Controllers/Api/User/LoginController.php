@@ -1,4 +1,9 @@
 <?php
+/**
+ * Sunny 2020/12/14 下午1:51
+ * ogg sit down and start building bugs.
+ * Author: Ogg <baoziyoo@gmail.com>
+ */
 
 namespace App\Http\Controllers\Api\User;
 
@@ -37,8 +42,8 @@ class LoginController extends Controller
         ]);
     }
 
-    private function getJwtModel(): \App\Models\Jwt\Service\Jwt
+    private function getJwtModel(): \App\Models\Jwt\Service\JwtService
     {
-        return $this->getModel('Jwt:Jwt');
+        return $this->getService('Jwt:JwtService');
     }
 }

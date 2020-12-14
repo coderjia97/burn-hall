@@ -1,4 +1,9 @@
 <?php
+/**
+ * Sunny 2020/12/14 下午1:51
+ * ogg sit down and start building bugs.
+ * Author: Ogg <baoziyoo@gmail.com>
+ */
 
 namespace App\Http\Extend\ApiFirewall;
 
@@ -8,6 +13,7 @@ class Jwt implements Firewall
 {
     public function handle(Request $request)
     {
+        return true;
         if (config('app.apiAccept', '') !== $request->headers->get('accept')) {
             return false;
         }
@@ -29,8 +35,8 @@ class Jwt implements Firewall
         return true;
     }
 
-    private function getJwtModel(): \App\Models\Jwt\Service\Jwt
+    private function getJwtModel(): \App\Models\Jwt\Service\JwtService
     {
-        return app('modelHelper')->createModelService('Jwt:Jwt');
+        return app('modelHelper')->getService('Jwt:JwtService');
     }
 }

@@ -1,4 +1,9 @@
 <?php
+/**
+ * Sunny 2020/12/14 下午1:51
+ * ogg sit down and start building bugs.
+ * Author: Ogg <baoziyoo@gmail.com>
+ */
 
 return [
 
@@ -229,4 +234,5 @@ return [
 
     ],
     'apiAccept' => 'application/whell.api+json',
+    'salt' => '1014c903ef8c9d3556dcaa76d2928479',
 ];
