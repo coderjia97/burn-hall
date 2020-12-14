@@ -1,6 +1,6 @@
 <?php
 /**
- * Sunny 2020/12/14 下午1:51
+ * Sunny 2020/12/14 下午4:42
  * ogg sit down and start building bugs.
  * Author: Ogg <baoziyoo@gmail.com>
  */
@@ -31,6 +31,11 @@ class Jwt implements Firewall
         if (!$jwt['guid']) {
             return false;
         }
+
+        // todo 完善登录用户信息
+        resolve('user')->setUser([
+            'id' => '111',
+        ]);
 
         return true;
     }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Sunny 2020/12/14 下午1:51
+ * Sunny 2020/12/14 下午4:42
  * ogg sit down and start building bugs.
  * Author: Ogg <baoziyoo@gmail.com>
  */
@@ -180,6 +180,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         \App\Providers\HelperProvider::class,
+        \App\Providers\UserProvider::class,
     ],
 
     /*
