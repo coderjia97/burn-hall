@@ -16,4 +16,3 @@ class JwtException extends Exception
     public $messages = [
     ];
 }
-

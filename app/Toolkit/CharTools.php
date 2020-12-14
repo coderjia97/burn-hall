@@ -14,8 +14,6 @@ class CharTools extends App
      * 2019/10/31 By:Ogg
      *
      * @param $len
-     *
-     * @return string
      */
     public static function getRandChar($len): string
     {
@@ -36,8 +34,6 @@ class CharTools extends App
     /**
      * 生成GUID
      * 2019/10/31 By:Ogg
-     *
-     * @return string
      */
     public static function generateGuid(): string
     {

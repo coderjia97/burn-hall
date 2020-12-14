@@ -13,10 +13,8 @@ class ArrayTools extends App
      * 判断数组键是否存在
      * 2019/10/31 By:Ogg
      *
-     * @param array $array
-     * @param array $keys
      * @param bool $strictMode true 严格模式 判断是否为null|''|0
-     * @param bool $tips true 提示某个字段不存在
+     * @param bool $tips       true 提示某个字段不存在
      *
      * @return array|bool
      */
@@ -39,13 +37,8 @@ class ArrayTools extends App
      * 2019/10/31 By:Ogg
      *
      * @param $array
-     * @param int $pid
-     * @param int $level
-     * @param int $toLaravel
-     *
-     * @return array
      */
-    public static function arrayInLaravel($array, $pid = 0, $level = 1, $toLaravel = 999): array
+    public static function arrayInLaravel($array, int $pid = 0, int $level = 1, int $toLaravel = 999): array
     {
         static $list = [];
         foreach ($array as $v) {
@@ -65,8 +58,6 @@ class ArrayTools extends App
      *
      * @param $array
      * @param $pId
-     *
-     * @return array
      */
     public static function childrenCount($array, $pId): array
     {

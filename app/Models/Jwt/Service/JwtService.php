@@ -23,7 +23,7 @@ class JwtService extends BaseModel
 
     public function decode($assetsToken): array
     {
-        return (array)FirebaseJWT::decode($assetsToken, config('jwt.secretKey'), ['HS256']);
+        return (array) FirebaseJWT::decode($assetsToken, config('jwt.secretKey'), ['HS256']);
     }
 
     protected function generateDefaultConfigByGuid($guid): array

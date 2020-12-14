@@ -16,8 +16,6 @@ class Api
     /**
      * Handle an incoming request.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param \Closure $next
      * @return mixed
      */
     public function handle(Request $request, Closure $next)
@@ -30,15 +28,15 @@ class Api
         $startTime = microtime(true);
         $response = $next($request);
 
-        $info = $request->method() . '  ' . $request->ip() . '  ' . $request->fullUrl() . PHP_EOL;
-        $info .= 'params:' . json_encode($request->all()) . PHP_EOL;
-        $info .= 'time:' . (microtime(true) - $startTime) . PHP_EOL;
-        $info .= 'header:' . json_encode($request->header()) . PHP_EOL;
-        $info .= 'content:' . $response->getContent() . PHP_EOL;
-        $info .= str_repeat('----------', 50) . PHP_EOL;
+        $info = $request->method().'  '.$request->ip().'  '.$request->fullUrl().PHP_EOL;
+        $info .= 'params:'.json_encode($request->all()).PHP_EOL;
+        $info .= 'time:'.(microtime(true) - $startTime).PHP_EOL;
+        $info .= 'header:'.json_encode($request->header()).PHP_EOL;
+        $info .= 'content:'.$response->getContent().PHP_EOL;
+        $info .= str_repeat('----------', 50).PHP_EOL;
         Log::channel('api_info_log')->info($info);
 
-        if($response->getStatusCode() != 200){
+        if (200 != $response->getStatusCode()) {
             Log::channel('api_error_log')->error($info);
         }
 

@@ -14,8 +14,6 @@ class DateTools extends App
      * 2019/10/31 By:Ogg
      *
      * @param string $period
-     *
-     * @return array
      */
     public static function getTimePeriod($period = ''): array
     {
@@ -73,8 +71,6 @@ class DateTools extends App
     /**
      * 返回今日开始和结束的时间戳
      * 2019/10/31 By:Ogg
-     *
-     * @return array
      */
     public static function today(): array
     {
@@ -89,8 +85,6 @@ class DateTools extends App
     /**
      * 返回昨日开始和结束的时间戳
      * 2019/10/31 By:Ogg
-     *
-     * @return array
      */
     public static function yesterday(): array
     {
@@ -105,8 +99,6 @@ class DateTools extends App
     /**
      * 返回本周开始和结束的时间戳
      * 2019/10/31 By:Ogg
-     *
-     * @return array
      */
     public static function week(): array
     {
@@ -122,8 +114,6 @@ class DateTools extends App
     /**
      * 返回上周开始和结束的时间戳
      * 2019/10/31 By:Ogg
-     *
-     * @return array
      */
     public static function lastWeek(): array
     {
@@ -140,8 +130,6 @@ class DateTools extends App
      * 2019/10/31 By:Ogg
      *
      * @param bool $everyDay
-     *
-     * @return array
      */
     public static function month($everyDay = false): array
     {
@@ -156,8 +144,6 @@ class DateTools extends App
     /**
      * 返回上个月开始和结束的时间戳
      * 2019/10/31 By:Ogg
-     *
-     * @return array
      */
     public static function lastMonth(): array
     {
@@ -172,8 +158,6 @@ class DateTools extends App
     /**
      * 返回今年开始和结束的时间戳
      * 2019/10/31 By:Ogg
-     *
-     * @return array
      */
     public static function year(): array
     {
@@ -188,8 +172,6 @@ class DateTools extends App
     /**
      * 返回去年开始和结束的时间戳
      * 2019/10/31 By:Ogg
-     *
-     * @return array
      */
     public static function lastYear(): array
     {
@@ -205,10 +187,8 @@ class DateTools extends App
      * 获取几天前零点到现在/昨日结束的时间戳
      * 2019/10/31 By:Ogg
      *
-     * @param int $day 天数
+     * @param int  $day 天数
      * @param bool $now 返回现在或者昨天结束时间戳
-     *
-     * @return array
      */
     public static function dayToNow($day = 1, $now = true): array
     {

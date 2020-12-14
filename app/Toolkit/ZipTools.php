@@ -26,8 +26,8 @@ class ZipTools extends App
      * add_file 压缩单个文件
      * 2019/10/31 By:Ogg
      *
-     * @param string $filename 被压缩的文件
-     * @param null $zipFilename string 在压缩文件中的文件名称，如果不设置为压缩文件的名称，默认不设置
+     * @param string $filename    被压缩的文件
+     * @param null   $zipFilename string 在压缩文件中的文件名称，如果不设置为压缩文件的名称，默认不设置
      *
      * @return int 1 or 0
      */
@@ -67,7 +67,7 @@ class ZipTools extends App
      * 2019/10/31 By:Ogg
      *
      * @param string $zipFilename 解压缩的文件
-     * @param string $path 解压厚的路径
+     * @param string $path        解压厚的路径
      *
      * @return int 1 or 0
      */
@@ -93,8 +93,8 @@ class ZipTools extends App
      * add_file 添加目录到zip对象
      * 2019/10/31 By:Ogg
      *
-     * @param string $dir 压缩目录路径
-     * @param null $parent 压缩文件的文件名，包括路径
+     * @param string $dir    压缩目录路径
+     * @param null   $parent 压缩文件的文件名，包括路径
      *
      * @return bool
      */
@@ -105,12 +105,12 @@ class ZipTools extends App
             try {
                 while (false !== ($file = readdir($handle))) {
                     if ('.' != $file && '..' != $file) {
-                        $curPath = $dir . DIRECTORY_SEPARATOR . $file;
+                        $curPath = $dir.DIRECTORY_SEPARATOR.$file;
                         if (is_dir($curPath)) {
-                            $parentParam = $parent ? $parent . '/' . $file : $file;
+                            $parentParam = $parent ? $parent.'/'.$file : $file;
                             $this->createZip($curPath, $parentParam);
                         } else {
-                            $filenameZip = $parent ? $parent . '/' . $file : $file;
+                            $filenameZip = $parent ? $parent.'/'.$file : $file;
                             $this->addFile($curPath, $filenameZip);
                         }
                     }
@@ -129,8 +129,6 @@ class ZipTools extends App
      * 2019/10/31 By:Ogg
      *
      * @param string $zipFilename 压缩文件
-     *
-     * @return array
      */
     public function getList($zipFilename = 'zip.zip'): array
     {

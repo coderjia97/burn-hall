@@ -21,7 +21,7 @@ class Auth
     {
         if ($this->checkWhitelists($request->getRequestUri())) {
             foreach (config('apiFirewall') as $firewall) {
-                if (!(new $firewall)->handle($request)) {
+                if (!(new $firewall())->handle($request)) {
                     throw new AuthException(AuthException::TOKEN_EXPIRED);
                 }
             }

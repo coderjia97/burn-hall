@@ -12,49 +12,55 @@ use Illuminate\Support\Facades\Validator;
 /**
  * 扩展验证器
  */
-class  BaseValidator
+class BaseValidator
 {
     /**
      * 当前验证规则
+     *
      * @var array
      */
     protected $rule = [];
 
     /**
      * 验证提示信息
+     *
      * @var array
      */
     protected $message = [];
 
     /**
      * 验证场景定义
+     *
      * @var array
      */
     protected $scene = [];
 
     /**
      * 设置当前验证场景
+     *
      * @var array
      */
     protected $currentScene = null;
 
     /**
      * 验证失败错误信息
+     *
      * @var string
      */
     protected $error = '';
 
     /**
      * 场景需要验证的规则
+     *
      * @var array
      */
     protected $only = [];
 
-
     /**
      * 设置验证场景
-     * @access public
+     *
      * @param string $name 场景名
+     *
      * @return $this
      */
     public function scene(string $name): self
@@ -67,12 +73,11 @@ class  BaseValidator
 
     /**
      * 数据验证
-     * @access public
-     * @param array $data 数据
-     * @param mixed $rules 验证规则
-     * @param array $message 自定义验证信息
-     * @param string $scene 验证场景
-     * @return bool
+     *
+     * @param array  $data    数据
+     * @param mixed  $rules   验证规则
+     * @param array  $message 自定义验证信息
+     * @param string $scene   验证场景
      */
     public function check(array $data, $rules = [], $message = [], $scene = ''): bool
     {
@@ -105,6 +110,7 @@ class  BaseValidator
         //验证失败
         if ($validator->fails()) {
             $this->error = $validator->errors()->first();
+
             return false;
         }
 
@@ -113,9 +119,8 @@ class  BaseValidator
 
     /**
      * 获取数据验证的场景
-     * @access protected
+     *
      * @param string $scene 验证场景
-     * @return bool
      */
     protected function getScene(string $scene = ''): bool
     {
@@ -131,7 +136,8 @@ class  BaseValidator
 
         if (!isset($this->scene[$scene])) {
             //指定场景未找到写入error
-            $this->error = "scene:" . $scene . 'is not found';
+            $this->error = 'scene:'.$scene.'is not found';
+
             return false;
         }
         // 如果设置了验证适用场景

@@ -14,8 +14,6 @@ class FileTools extends App
      * 2019/10/31 By:Ogg
      *
      * @param string $filename 文件名
-     *
-     * @return bool
      */
     public static function has($filename = ''): bool
     {
@@ -27,8 +25,6 @@ class FileTools extends App
      * 2019/10/31 By:Ogg
      *
      * @param string $dir 目录
-     *
-     * @return bool
      */
     public static function hasFolder($dir = ''): bool
     {
@@ -40,8 +36,6 @@ class FileTools extends App
      * 2019/10/31 By:Ogg
      *
      * @param string $dir 目录
-     *
-     * @return bool
      */
     public static function createFolder($dir = ''): bool
     {
@@ -60,9 +54,7 @@ class FileTools extends App
      * 2019/10/31 By:Ogg
      *
      * @param string $filename 文件路径
-     * @param string $data 文件写入的内容
-     *
-     * @return bool
+     * @param string $data     文件写入的内容
      */
     public static function write($filename = '', $data = ''): bool
     {
@@ -115,8 +107,6 @@ class FileTools extends App
      * 2019/10/31 By:Ogg
      *
      * @param string $filename 文件路径
-     *
-     * @return bool
      */
     public static function delete($filename = ''): bool
     {
@@ -130,8 +120,6 @@ class FileTools extends App
      * 2019/10/31 By:Ogg
      *
      * @param string $dir
-     *
-     * @return bool
      */
     public static function deleteFolder($dir = ''): bool
     {
@@ -143,7 +131,7 @@ class FileTools extends App
         $dh = opendir($dir);
         while ($file = readdir($dh)) {
             if ('.' != $file && '..' != $file) {
-                $fullPath = $dir . DIRECTORY_SEPARATOR . $file;
+                $fullPath = $dir.DIRECTORY_SEPARATOR.$file;
                 if (!is_dir($fullPath)) {
                     unlink($fullPath);
                 } else {
@@ -165,11 +153,9 @@ class FileTools extends App
      * copy 拷贝文件或目录
      * 2019/10/31 By:Ogg
      *
-     * @param string $new 拷贝目录或者文件
-     * @param string $old 目标目录或者文件
-     * @param bool $delete true为删除拷贝目录 false为不删除拷贝目录
-     *
-     * @return bool
+     * @param string $new    拷贝目录或者文件
+     * @param string $old    目标目录或者文件
+     * @param bool   $delete true为删除拷贝目录 false为不删除拷贝目录
      */
     public static function copy(string $new, string $old, $delete = false): bool
     {
@@ -187,26 +173,26 @@ class FileTools extends App
         if (is_file($old)) {
             if (!isset($pathInfoNew['extension'])) {
                 $pathInfo = pathinfo($old);
-                $is = copy($old, $new . DIRECTORY_SEPARATOR . $pathInfo['basename']);
+                $is = copy($old, $new.DIRECTORY_SEPARATOR.$pathInfo['basename']);
             } else {
                 $is = copy($old, $new);
             }
             if (true == $delete) {
                 self::delete($old);
             }
-        } else if (!isset($pathInfoNew['extension'])) {
+        } elseif (!isset($pathInfoNew['extension'])) {
             $dir = scandir($old);
             foreach ($dir as $filename) {
                 if (!in_array($filename, ['.', '..'])) {
-                    if (is_dir($old . DIRECTORY_SEPARATOR . $filename)) {
-                        $is = self::copy($new . DIRECTORY_SEPARATOR . $filename, $old . DIRECTORY_SEPARATOR . $filename, $delete);
+                    if (is_dir($old.DIRECTORY_SEPARATOR.$filename)) {
+                        $is = self::copy($new.DIRECTORY_SEPARATOR.$filename, $old.DIRECTORY_SEPARATOR.$filename, $delete);
                         if (!$is) {
                             return false;
                         }
                         continue;
                     }
 
-                    $is = copy($old . DIRECTORY_SEPARATOR . $filename, $new . DIRECTORY_SEPARATOR . $filename);
+                    $is = copy($old.DIRECTORY_SEPARATOR.$filename, $new.DIRECTORY_SEPARATOR.$filename);
                 }
             }
         }
@@ -219,8 +205,6 @@ class FileTools extends App
      * 2019/10/31 By:Ogg
      *
      * @param string $dir 文件路径
-     *
-     * @return array
      */
     public static function findOwn($dir = ''): array
     {
@@ -229,7 +213,7 @@ class FileTools extends App
         if ($handle) {
             while (false !== ($file = readdir($handle))) {
                 if ('.' != $file && '..' != $file) {
-                    $cur_path = $dir . DIRECTORY_SEPARATOR . $file;
+                    $cur_path = $dir.DIRECTORY_SEPARATOR.$file;
                     if (is_dir($cur_path)) {
                         $files = self::findOwn($cur_path);
                         if ($files) {

@@ -18,7 +18,7 @@ class ModelHelper
         } catch (\Exception $e) {
             app()->singleton($service, function ($app) use ($service, $version) {
                 [$dir, $file] = explode(':', $service);
-                $version = $version ? '\\' . $version . '\\' : '';
+                $version = $version ? '\\'.$version.'\\' : '';
                 $class = sprintf($this->dir, $dir, $version, 'Service', $file);
 
                 return new $class();
@@ -35,7 +35,7 @@ class ModelHelper
         } catch (\Exception $e) {
             app()->singleton($service, function ($app) use ($service, $version) {
                 [$dir, $file] = explode(':', $service);
-                $version = $version ? '\\' . $version . '\\' : '';
+                $version = $version ? '\\'.$version.'\\' : '';
                 $class = sprintf($this->dir, $dir, $version, 'Dao', $file);
 
                 return new $class();

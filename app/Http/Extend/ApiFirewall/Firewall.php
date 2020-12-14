@@ -13,4 +13,3 @@ interface Firewall
 {
     public function handle(Request $request);
 }
-

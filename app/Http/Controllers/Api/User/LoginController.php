@@ -19,14 +19,14 @@ class LoginController extends Controller
             'message' => '获取成功',
             'data' => [
                 'token' => $this->getJwtModel()->generateAssetsTokenByGuid('aaa'),
-            ]
+            ],
         ]);
     }
 
     public function update(Request $request)
     {
         $token = $request->get('token', '');
-        if ($token === '') {
+        if ('' === $token) {
             throw new Exception('403token丢失');
         }
 

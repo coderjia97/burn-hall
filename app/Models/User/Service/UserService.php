@@ -16,7 +16,7 @@ class UserService extends BaseModel
 {
     public function createUser($data)
     {
-        $validator = new UserValidator;
+        $validator = new UserValidator();
 
         if (!$validator->scene('create')->check($data)) {
             throw new \InvalidArgumentException($validator->getError());
@@ -24,7 +24,7 @@ class UserService extends BaseModel
 
         $data['salt'] = CharTools::getRandChar(16);
         $data['guid'] = CharTools::generateGuid();
-        $data['password'] = sha1(md5($data['salt'] . config('app.salt') . $data['password']) . $data['salt']);
+        $data['password'] = sha1(md5($data['salt'].config('app.salt').$data['password']).$data['salt']);
 
         return $this->getUserDao()->create($data);
     }

@@ -15,6 +15,7 @@ class UserController extends Controller
     public function get($id): string
     {
         $this->getUserService()->createUser([]);
+
         return 'get';
     }
 
