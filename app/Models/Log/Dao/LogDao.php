@@ -5,12 +5,13 @@
  * Author: Ogg <baoziyoo@gmail.com>
  */
 
-namespace App\Models\User\Dao;
+namespace App\Models\Log\Dao;
 
 use App\Models\BaseModel;
 
-class UserDao extends BaseModel
+class LogDao extends BaseModel
 {
     protected $guarded = [];
-    protected $table = 'user';
+    protected $table = 'log';
+    public const UPDATED_AT = null;
 }

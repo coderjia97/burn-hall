@@ -1,6 +1,6 @@
 <?php
 /**
- * Sunny 2020/12/14 下午1:51
+ * Sunny 2020/12/15 上午9:38
  * ogg sit down and start building bugs.
  * Author: Ogg <baoziyoo@gmail.com>
  */
@@ -14,7 +14,11 @@ class UserController extends Controller
 {
     public function get($id): string
     {
-        $this->getUserService()->createUser([]);
+        $this->getUserService()->create([
+            'name' => 'test1',
+            'password' => '123',
+            'group' => 0,
+        ]);
 
         return 'get';
     }
