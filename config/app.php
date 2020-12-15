@@ -1,12 +1,11 @@
 <?php
 /**
- * Sunny 2020/12/14 下午4:42
+ * Sunny 2020/12/15 下午8:51
  * ogg sit down and start building bugs.
  * Author: Ogg <baoziyoo@gmail.com>
  */
 
 return [
-
     /*
     |--------------------------------------------------------------------------
     | Application Name
@@ -44,7 +43,7 @@ return [
     |
     */
 
-    'debug' => (bool)env('APP_DEBUG', false),
+    'debug' => (bool) env('APP_DEBUG', false),
 
     /*
     |--------------------------------------------------------------------------
@@ -72,7 +71,7 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+    'timezone' => 'PRC',
 
     /*
     |--------------------------------------------------------------------------
@@ -140,7 +139,6 @@ return [
     */
 
     'providers' => [
-
         /*
          * Laravel Framework Service Providers...
          */
@@ -195,7 +193,6 @@ return [
     */
 
     'aliases' => [
-
         'App' => Illuminate\Support\Facades\App::class,
         'Arr' => Illuminate\Support\Arr::class,
         'Artisan' => Illuminate\Support\Facades\Artisan::class,
@@ -232,7 +229,6 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
-
     ],
     'apiAccept' => 'application/whell.api+json',
     'salt' => '1014c903ef8c9d3556dcaa76d2928479',

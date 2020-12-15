@@ -1,12 +1,13 @@
 <?php
 /**
- * Sunny 2020/12/14 下午1:51
+ * Sunny 2020/12/15 下午8:51
  * ogg sit down and start building bugs.
  * Author: Ogg <baoziyoo@gmail.com>
  */
 
 namespace App\Console;
 
+use App\Console\Commands\Job;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -27,7 +28,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')->hourly();
+        $schedule->command(Job::class)->everyMinute();
     }
 
     /**

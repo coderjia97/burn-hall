@@ -1,6 +1,6 @@
 <?php
 /**
- * Sunny 2020/12/15 上午9:38
+ * Sunny 2020/12/15 下午8:51
  * ogg sit down and start building bugs.
  * Author: Ogg <baoziyoo@gmail.com>
  */
@@ -12,6 +12,7 @@ use App\Models\Log\Service\LogService;
 use App\Models\User\Dao\UserDao;
 use App\Models\User\Validator\UserValidator;
 use App\Toolkit\CharTools;
+use Illuminate\Support\Facades\Hash;
 
 class UserService extends BaseModel
 {
@@ -32,7 +33,7 @@ class UserService extends BaseModel
 
         $data['salt'] = CharTools::getRandChar(16);
         $data['guid'] = CharTools::generateGuid();
-        $data['password'] = sha1(md5($data['salt'] . config('app.salt') . $data['password']) . $data['salt']);
+        $data['password'] = Hash::make(sha1(md5($data['salt'].config('app.salt').$data['password']).$data['salt']));
         $data['isAdmin'] = self::IS_ADMIN_FALSE;
         $data['status'] = self::STATUS_TRUE;
         $data['createUserId'] = $this->getCurrentUser()->getId();

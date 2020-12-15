@@ -1,6 +1,6 @@
 <?php
 /**
- * Sunny 2020/12/14 下午1:51
+ * Sunny 2020/12/15 下午8:51
  * ogg sit down and start building bugs.
  * Author: Ogg <baoziyoo@gmail.com>
  */
@@ -10,7 +10,6 @@ use Monolog\Handler\StreamHandler;
 use Monolog\Handler\SyslogUdpHandler;
 
 return [
-
     /*
     |--------------------------------------------------------------------------
     | Default Log Channel
@@ -126,6 +125,16 @@ return [
             'driver' => 'single',
             'path' => storage_path('logs/sql/slow-sql.log'),
         ],
-    ],
 
+        'job' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/job/job.log'),
+            'days' => 30,
+        ],
+        'job_error' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/job/job_error.log'),
+            'days' => 30,
+        ],
+    ],
 ];

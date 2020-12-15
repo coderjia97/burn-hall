@@ -5,15 +5,11 @@
  * Author: Ogg <baoziyoo@gmail.com>
  */
 
-namespace App\Models;
+namespace App\Models\Job;
 
-use App\Models\User\Provider\CurrentUserProvider;
-use Illuminate\Database\Eloquent\Model;
-
-class BaseModel extends Model
+abstract class AbstractJob
 {
-    public const CREATED_AT = 'createTime';
-    public const UPDATED_AT = 'updateTime';
+    abstract public function execute($args = []);
 
     protected function getService($service, $version = '')
     {
@@ -23,10 +19,5 @@ class BaseModel extends Model
     protected function getDao($dao, $version = '')
     {
         return app('modelHelper')->getDao($dao, $version);
-    }
-
-    protected function getCurrentUser(): CurrentUserProvider
-    {
-        return app('user');
     }
 }
