@@ -17,7 +17,6 @@
         "guzzlehttp/guzzle": "^7.0.1",
         "laravel/framework": "^8.12",
         "laravel/tinker": "^2.5",
-        "pragmarx/yaml": "^1.2",
         "symfony/yaml": "^5.2"
     },
     "require-dev": {

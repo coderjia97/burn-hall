@@ -13,9 +13,6 @@ yarn serve
 
 # 编译
 yarn build
-
-# Yaml 扩展
-composer require symfony/yaml
 ```
 
 #功能  
