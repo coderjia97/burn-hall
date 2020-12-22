@@ -25,12 +25,6 @@ use Illuminate\Support\Facades\Route;
 // DELETE deleteFunction /api/user/user/1
 // DELETE deleteFunction /api/user/user?id=1
 
-// GET getFunction /api/user/group/{id}
-// GET searchFunction /api/user/group
-// POST createFunction /api/user/group
-// PUT updateFunction /api/user/group/{id}
-// DELETE deleteFunction /api/user/group/{id}
-
 
 if (!empty($_SERVER['HTTP_ACCEPT']) && $_SERVER['HTTP_ACCEPT'] === config('app.apiAccept', '')) {
     if (strrpos($_SERVER['REQUEST_URI'], '?')) {

@@ -14,75 +14,46 @@ class GroupController extends Controller
 {
     public function get($id)
     {
-        try {
-            return response()->json([
-                'groupInfo' => $this->getGroupService()->getGroup($id),
-            ]);
-        } catch (\Exception $e) {
-            return response()->json([
-                'message' => $e->getMessage(),
-            ]);
-        }
+        $groupInfo = $this->getGroupService()->getGroup($id);
+        return response()->json([
+            'groupInfo' => $groupInfo
+        ]);
     }
 
     public function delete($id)
     {
-        try {
-            $this->getGroupService()->deleteGroup($id);
-            return response()->json([
-                'message' => '删除成功',
-            ]);
-        } catch (\Exception $e) {
-            return response()->json([
-                'message' => $e->getMessage(),
-            ]);
-        }
+        $this->getGroupService()->deleteGroup($id);
+        return response()->json([
+            'message' => '删除成功'
+        ]);
     }
 
     public function search(Request $request)
     {
         $param = $request->post();
-        try {
-            list($total, $list) = $this->getGroupService()->listGroup($param);
-            return response()->json([
-                'total' => $total,
-                'groupList' => $list,
-            ]);
-        } catch (\Exception $e) {
-            return response()->json([
-                'message' => $e->getMessage(),
-            ]);
-        }
+        list($count,$groupList) = $this->getGroupService()->listGroup($param);
+        return response()->json([
+            'total' => $count,
+            'groupList' => $groupList
+        ]);
     }
 
     public function create(Request $request)
     {
         $param = $request->post();
-        try {
-            $this->getGroupService()->createGroup($param);
-            return response()->json([
-                'message' => '创建成功',
-            ]);
-        } catch (\Exception $e) {
-            return response()->json([
-                'message' => $e->getMessage(),
-            ]);
-        }
+        $this->getGroupService()->createGroup($param);
+        return response()->json([
+            'message' => '创建成功'
+        ]);
     }
 
     public function update($id, Request $request)
     {
         $param = $request->all();
-        try {
-            $this->getGroupService()->updateGroup($id, $param);
-            return response()->json([
-                'message' => '修改成功',
-            ]);
-        } catch (\Exception $e) {
-            return response()->json([
-                'message' => $e->getMessage(),
-            ]);
-        }
+        $this->getGroupService()->updateGroup($id, $param);
+        return response()->json([
+            'message' => '修改成功'
+        ]);
     }
 
     private function getGroupService(): GroupService

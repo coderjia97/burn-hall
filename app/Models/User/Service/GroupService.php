@@ -9,6 +9,13 @@ use App\Models\User\Dao\GroupDao;
 
 class GroupService extends BaseModel
 {
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+
+        $this->dao=$this->getGroupDao();
+    }
+
     public function createGroup($data)
     {
         $validator = new GroupValidator();
@@ -16,12 +23,15 @@ class GroupService extends BaseModel
             throw new \InvalidArgumentException($validator->getError());
         }
 
-        if ($this->checkGroup(['name' => $data['name']])) throw new \InvalidArgumentException('角色名称已存在');
+        if ($this->getByName($data['name'])) {
+            throw new \InvalidArgumentException('角色名称已存在');
+        }
 
         $data['createUserId'] = $data['guid'];
         $data['updateUserId'] = $data['guid'];
 
-        return $this->getGroupDao()->create($data);
+        $this->getGroupDao()->create($data);
+        return true;
     }
 
     public function updateGroup($id, $data)
@@ -31,52 +41,74 @@ class GroupService extends BaseModel
             throw new \InvalidArgumentException($validator->getError());
         }
 
-        $where[] = ['id', '=', $id];
-        if (!$this->checkGroup($where)) throw new \InvalidArgumentException('角色不存在');
-
-        if (isset($data['name'])) {
-            $where = [];
-            $where[] = ['id', '!=', $id];
-            $where[] = ['name', '=', $data['name']];
-            if ($this->checkGroup($where)) throw new \InvalidArgumentException('角色名称已存在');
+        $groupInfo = $this->get($id);
+        if (empty($groupInfo)) {
+            throw new \InvalidArgumentException('角色不存在');
         }
+
+        $this->checkoName($id,$data['name']);
 
         $data['updateUserId'] = $data['guid'];
         unset($data['id']);
-        return $this->getGroupDao()->where('id', $id)->update($data);
+        unset($data['guid']);
+        $this->getGroupDao()->where('id', $id)->update($data);
+
+        return true;
     }
 
     public function deleteGroup($id)
     {
-        if (!$this->checkGroup([['id', '=', $id]])) throw new \InvalidArgumentException('角色不存在');
+        if (!$this->get($id)) {
+            throw new \InvalidArgumentException('角色不存在');
+        }
 
-        return $this->getGroupDao()->where('id', $id)->delete();
+        $this->getGroupDao()->where('id', $id)->delete();
+
+        return true;
     }
+
 
     public function listGroup($data)
     {
-        $page = !isset($data['Page']) ? 1 : $data['Page'];
-        $limit = !isset($data['Limit']) ? 10 : $data['Limit'];
+        $offset = !isset($data['offset']) ? 0 : $data['offset'];
+        $limit = !isset($data['limit']) ? 10 : $data['limit'];
 
-        $where = [];
-        if (!empty($data['name'])) $where[] = ['name', 'like', '%' . $data['name'] . '%'];
+        $conditions = [];
+        if (!empty($data['name'])) {
+            $conditions[] = ['name', 'like', '%' . $data['name'] . '%'];
+        }
 
-        $groupData = $this->getGroupDao()->where($where)->paginate($limit, '*', 'page', $page)->toArray();
+        $count = $this->count($conditions);
+        $groupData = $this->search($conditions,['id'=>'desc'],$offset,$limit);
 
-        return [$groupData['total'], $groupData['data']];
+        return [$count,$groupData];
     }
 
     public function getGroup($id)
     {
-        if (!$this->checkGroup(['id' => $id])) throw new \InvalidArgumentException('角色不存在');
+        $groupInfo = $this->get($id);
+        if (!$groupInfo) {
+            throw new \InvalidArgumentException('角色不存在');
+        }
 
-        return $this->getGroupDao()->where(['id' => $id])->first();
+        return $groupInfo;
     }
 
-    public function checkGroup($where)
+    protected function checkoName($id,$name){
+        $group = $this->getByName($name);
+
+        if (!empty($group) && $group['id'] != $id) {
+            throw new \InvalidArgumentException('角色名称已存在');
+        }
+
+        return true;
+    }
+
+    protected function getByName($name)
     {
-        return $this->getGroupDao()->where($where)->exists();
+        return $this->getGroupDao()->where(['name' => $name])->first()->toArray();
     }
+
 
     private function getGroupDao(): GroupDao
     {

@@ -13,6 +13,28 @@ class BaseModel extends Model
 {
     public const CREATED_AT = 'createTime';
     public const UPDATED_AT = 'updateTime';
+    public $dao;
+
+    public function get($id)
+    {
+        return $this->dao->where(['id' => $id])->first()->toArray();
+    }
+
+    public function search($conditions, $orders, $offset, $limit,$select='*')
+    {
+        $builder = $this->dao->where($conditions);
+
+        foreach ($orders as $key => $order) {
+            $builder = $builder->orderBy($key, $order);
+        }
+
+        return $builder->skip($offset)->take($limit)->select($select)->get()->toArray();
+    }
+
+    public function count($conditions)
+    {
+        return $this->dao->where($conditions)->count();
+    }
 
     public function getService($service, $version = '')
     {
