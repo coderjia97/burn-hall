@@ -5,6 +5,7 @@ namespace App\Models\User\Service;
 use App\Models\BaseModel;
 use App\Models\User\Dao\GroupDao;
 use App\Models\User\Validator\GroupValidator;
+use App\Toolkit\ArrayTools;
 
 class GroupService extends BaseModel
 {
@@ -40,7 +41,6 @@ class GroupService extends BaseModel
         if (!$validator->scene('update')->check($data)) {
             throw new \InvalidArgumentException($validator->getError());
         }
-        // todo 只取有用的字段做更新
 
         $groupInfo = $this->get($id);
         if (empty($groupInfo)) {
@@ -49,6 +49,7 @@ class GroupService extends BaseModel
 
         $this->checkName($id, $data['name']);
 
+        $data = ArrayTools::parts($data,['name','rules']);
         $data['updateUserId'] = $this->getCurrentUser()->getId();
 
         $this->getGroupDao()->where('id', $id)->update($data);

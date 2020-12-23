@@ -128,4 +128,29 @@ class ArrayTools extends App
 
         return $array;
     }
+
+    public static function parts(array $array, array $keys)
+    {
+        foreach (array_keys($array) as $key) {
+            if (!in_array($key, $keys)) {
+                unset($array[$key]);
+            }
+        }
+
+        return $array;
+    }
+
+    public static function requireds(array $array, array $keys, $strictMode = false)
+    {
+        foreach ($keys as $key) {
+            if (!array_key_exists($key, $array)) {
+                return false;
+            }
+            if ($strictMode && (is_null($array[$key]) || $array[$key] === '' || $array[$key] === 0)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
 }

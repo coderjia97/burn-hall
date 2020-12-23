@@ -22,14 +22,14 @@ class GroupController extends Controller
 
     public function search(Request $request)
     {
-        $conditions = $request->post();
+        $conditions = $request->all();
 
         return $this->getGroupService()->searchByPagination($conditions, []);
     }
 
     public function create(Request $request)
     {
-        $data = $request->post();
+        $data = $request->all();
 
         return $this->getGroupService()->createGroup($data);
     }
