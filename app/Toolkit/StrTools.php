@@ -1,6 +1,6 @@
 <?php
 /**
- * Sunny 2020/12/14 下午1:51
+ * Sunny 2020/12/23 下午2:46
  * ogg sit down and start building bugs.
  * Author: Ogg <baoziyoo@gmail.com>
  */
@@ -58,5 +58,21 @@ class StrTools extends App
         }
 
         return false;
+    }
+
+    /**
+     * 下划线转驼峰
+     *
+     * @param $str
+     *
+     * @return string|string[]|null
+     */
+    public static function convertUnderline($str)
+    {
+        $str = preg_replace_callback('/([-_]+([a-z]{1}))/i', function ($matches) {
+            return strtoupper($matches[2]);
+        }, $str);
+
+        return $str;
     }
 }
