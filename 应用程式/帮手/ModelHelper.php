@@ -11,7 +11,6 @@ class ModelHelper
 {
     protected $dir = '\App\Models\%s%s\%s\%s';
 
-
     public function getService($service, $version = '')
     {
         try {
