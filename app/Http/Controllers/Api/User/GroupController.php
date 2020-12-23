@@ -15,14 +15,14 @@ class GroupController extends Controller
     public function get($id)
     {
         $groupInfo = $this->getGroupService()->getGroup($id);
-        return response()->json([
-            'groupInfo' => $groupInfo
-        ]);
+        
+        return response()->json($groupInfo);
     }
 
     public function delete($id)
     {
         $this->getGroupService()->deleteGroup($id);
+        
         return response()->json([
             'message' => '删除成功'
         ]);
@@ -32,6 +32,7 @@ class GroupController extends Controller
     {
         $param = $request->post();
         list($count,$groupList) = $this->getGroupService()->listGroup($param);
+        
         return response()->json([
             'total' => $count,
             'groupList' => $groupList
@@ -42,6 +43,7 @@ class GroupController extends Controller
     {
         $param = $request->post();
         $this->getGroupService()->createGroup($param);
+        
         return response()->json([
             'message' => '创建成功'
         ]);
@@ -51,6 +53,7 @@ class GroupController extends Controller
     {
         $param = $request->all();
         $this->getGroupService()->updateGroup($id, $param);
+        
         return response()->json([
             'message' => '修改成功'
         ]);
