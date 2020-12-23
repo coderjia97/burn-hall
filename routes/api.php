@@ -25,7 +25,6 @@ use Illuminate\Support\Facades\Route;
 // DELETE deleteFunction /api/user/user/1
 // DELETE deleteFunction /api/user/user?id=1
 
-
 if (!empty($_SERVER['HTTP_ACCEPT']) && $_SERVER['HTTP_ACCEPT'] === config('app.apiAccept', '')) {
     if (strrpos($_SERVER['REQUEST_URI'], '?')) {
         $baseUrl = explode('/', substr($_SERVER['REQUEST_URI'], 5, strrpos($_SERVER['REQUEST_URI'], '?') - 5));
@@ -36,7 +35,7 @@ if (!empty($_SERVER['HTTP_ACCEPT']) && $_SERVER['HTTP_ACCEPT'] === config('app.a
     $i = 0;
     foreach ($baseUrl as &$params) {
         if (preg_match('/^\d+$/', $params) || preg_match('/(params:*+)/', $params)) {
-            $params = '{params' . ++$i . '}';
+            $params = '{params'.++$i.'}';
         }
     }
     unset($params);
@@ -53,24 +52,23 @@ if (!empty($_SERVER['HTTP_ACCEPT']) && $_SERVER['HTTP_ACCEPT'] === config('app.a
         switch ($_SERVER['REQUEST_METHOD']) {
             case 'GET':
                 if ($isSearch) {
-                    Route::match(['GET'], '/' . implode('/', $baseUrl), implode('\\', $url) . 'Controller@get');
+                    Route::match(['GET'], '/'.implode('/', $baseUrl), implode('\\', $url).'Controller@get');
                 } else {
-                    Route::match(['GET'], '/' . implode('/', $baseUrl), implode('\\', $url) . 'Controller@search');
+                    Route::match(['GET'], '/'.implode('/', $baseUrl), implode('\\', $url).'Controller@search');
                 }
                 break;
             case 'POST':
-                Route::match(['POST'], '/' . implode('/', $baseUrl), implode('\\', $url) . 'Controller@create');
+                Route::match(['POST'], '/'.implode('/', $baseUrl), implode('\\', $url).'Controller@create');
                 break;
             case 'PUT':
-                Route::match(['PUT'], '/' . implode('/', $baseUrl), implode('\\', $url) . 'Controller@update');
+                Route::match(['PUT'], '/'.implode('/', $baseUrl), implode('\\', $url).'Controller@update');
                 break;
             case 'PATCH':
-                Route::match(['PATCH'], '/' . implode('/', $baseUrl), implode('\\', $url) . 'Controller@modify');
+                Route::match(['PATCH'], '/'.implode('/', $baseUrl), implode('\\', $url).'Controller@modify');
                 break;
             case 'DELETE':
-                Route::match(['DELETE'], '/' . implode('/', $baseUrl), implode('\\', $url) . 'Controller@delete');
+                Route::match(['DELETE'], '/'.implode('/', $baseUrl), implode('\\', $url).'Controller@delete');
                 break;
         }
     });
 }
-

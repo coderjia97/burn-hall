@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Http\Controllers\Api\User;
-
 
 use App\Http\Controllers\Controller;
 use App\Models\User\Service\MenuService;
@@ -11,15 +9,7 @@ class MenuController extends Controller
 {
     public function search()
     {
-        try {
-            return response()->json([
-                'menuInfo' => $this->getMenuService()->listMenu(),
-            ]);
-        } catch (\Exception $e) {
-            return response()->json([
-                'message' => $e->getMessage(),
-            ]);
-        }
+        return response()->json($this->getMenuService()->listMenu());
     }
 
     private function getMenuService(): MenuService

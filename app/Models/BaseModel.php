@@ -21,7 +21,7 @@ class BaseModel extends Model
         return $this->dao->where(['id' => $id])->first()->toArray();
     }
 
-    public function search($conditions, $orders, $offset, $limit,$select='*')
+    public function search($conditions, $orders, $offset, $limit, $select = '*')
     {
         $builder = $this->dao->where($conditions);
 
@@ -35,6 +35,14 @@ class BaseModel extends Model
     public function count($conditions)
     {
         return $this->dao->where($conditions)->count();
+    }
+
+    protected function getOffsetAndLimit(): array
+    {
+        $offset = request('offset', config('pagination.defaultPagingOffset'));
+        $limit = request('limit', config('pagination.defaultPagingLimit'));
+
+        return [$offset, $limit];
     }
 
     protected function getService($service, $version = '')

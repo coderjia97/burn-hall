@@ -16,12 +16,12 @@ class UserGroup extends Migration
         Schema::create('user_group', function (Blueprint $table) {
             $table->increments('id')->comment('id');
             $table->string('name')->comment('用户组名称');
+            $table->string('rules')->nullable()->comment('权限规则name');
             $table->unsignedTinyInteger('status')->default(1)->comment('状态: 1 开启;0 关闭');
             $table->timestamp('createTime')->nullable()->comment('创建时间');
             $table->unsignedInteger('createUserId')->nullable()->comment('创建用户');
             $table->timestamp('updateTime')->nullable()->comment('更新时间');
             $table->unsignedInteger('updateUserId')->nullable()->comment('更新用户');
-            $table->string('rules')->nullable()->comment('权限规则ID');
         });
     }
 
