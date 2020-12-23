@@ -21,6 +21,7 @@ class UserGroup extends Migration
             $table->unsignedInteger('createUserId')->nullable()->comment('创建用户');
             $table->timestamp('updateTime')->nullable()->comment('更新时间');
             $table->unsignedInteger('updateUserId')->nullable()->comment('更新用户');
+            $table->string('rules')->nullable()->comment('权限规则ID');
         });
     }
 

@@ -25,6 +25,7 @@ use Illuminate\Support\Facades\Route;
 // DELETE deleteFunction /api/user/user/1
 // DELETE deleteFunction /api/user/user?id=1
 
+
 if (!empty($_SERVER['HTTP_ACCEPT']) && $_SERVER['HTTP_ACCEPT'] === config('app.apiAccept', '')) {
     if (strrpos($_SERVER['REQUEST_URI'], '?')) {
         $baseUrl = explode('/', substr($_SERVER['REQUEST_URI'], 5, strrpos($_SERVER['REQUEST_URI'], '?') - 5));
@@ -48,7 +49,6 @@ if (!empty($_SERVER['HTTP_ACCEPT']) && $_SERVER['HTTP_ACCEPT'] === config('app.a
     array_walk($url, static function (&$url) {
         $url = ucfirst($url);
     });
-
     Route::group(['middleware' => 'api'], function () use ($isSearch, $baseUrl, $url) {
         switch ($_SERVER['REQUEST_METHOD']) {
             case 'GET':
