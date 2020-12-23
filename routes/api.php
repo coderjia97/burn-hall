@@ -1,10 +1,11 @@
 <?php
 /**
- * Sunny 2020/12/14 下午1:51
+ * Sunny 2020/12/23 下午2:46
  * ogg sit down and start building bugs.
  * Author: Ogg <baoziyoo@gmail.com>
  */
 
+use App\Toolkit\StrTools;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -49,25 +50,28 @@ if (!empty($_SERVER['HTTP_ACCEPT']) && $_SERVER['HTTP_ACCEPT'] === config('app.a
         $url = ucfirst($url);
     });
     Route::group(['middleware' => 'api'], function () use ($isSearch, $baseUrl, $url) {
+        $baseUrl = implode('/', $baseUrl);
+        $url = StrTools::convertUnderline(implode('\\', $url));
+
         switch ($_SERVER['REQUEST_METHOD']) {
             case 'GET':
                 if ($isSearch) {
-                    Route::match(['GET'], '/'.implode('/', $baseUrl), implode('\\', $url).'Controller@get');
+                    Route::match(['GET'], '/'.$baseUrl, $url.'Controller@get');
                 } else {
-                    Route::match(['GET'], '/'.implode('/', $baseUrl), implode('\\', $url).'Controller@search');
+                    Route::match(['GET'], '/'.$baseUrl, $url.'Controller@search');
                 }
                 break;
             case 'POST':
-                Route::match(['POST'], '/'.implode('/', $baseUrl), implode('\\', $url).'Controller@create');
+                Route::match(['POST'], '/'.$baseUrl, $url.'Controller@create');
                 break;
             case 'PUT':
-                Route::match(['PUT'], '/'.implode('/', $baseUrl), implode('\\', $url).'Controller@update');
+                Route::match(['PUT'], '/'.$baseUrl, $url.'Controller@update');
                 break;
             case 'PATCH':
-                Route::match(['PATCH'], '/'.implode('/', $baseUrl), implode('\\', $url).'Controller@modify');
+                Route::match(['PATCH'], '/'.$baseUrl, $url.'Controller@modify');
                 break;
             case 'DELETE':
-                Route::match(['DELETE'], '/'.implode('/', $baseUrl), implode('\\', $url).'Controller@delete');
+                Route::match(['DELETE'], '/'.$baseUrl, $url.'Controller@delete');
                 break;
         }
     });
