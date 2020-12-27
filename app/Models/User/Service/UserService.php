@@ -59,7 +59,7 @@ class UserService extends BaseModel
 
     public function getUser($guid): array
     {
-        $userInfo = $this->get($guid);
+        $userInfo = $this->getUserInfo($guid);
         if (!$userInfo) {
             throw new \InvalidArgumentException('用户不存在');
         }
@@ -74,7 +74,7 @@ class UserService extends BaseModel
             throw new \InvalidArgumentException($validator->getError());
         }
 
-        $groupInfo = $this->get($guid);
+        $groupInfo = $this->getUserInfo($guid);
         if (empty($groupInfo)) {
             throw new \InvalidArgumentException('用户不存在');
         }
@@ -95,7 +95,7 @@ class UserService extends BaseModel
 
     public function deleteUser($guid): bool
     {
-        if (!$this->get($guid)) {
+        if (!$this->getUserInfo($guid)) {
             throw new \InvalidArgumentException('用户不存在');
         }
 
@@ -107,7 +107,7 @@ class UserService extends BaseModel
 
     public function modify($guid): bool
     {
-        $userInfo = $this->get($guid);
+        $userInfo = $this->getUserInfo($guid);
         if(empty($userInfo)){
             throw new \InvalidArgumentException('用户不存在');
         }
@@ -136,6 +136,13 @@ class UserService extends BaseModel
                 'limit' => $limit,
             ],
         ];
+    }
+
+    protected function getUserInfo($guid): array
+    {
+        $data = $this->dao->where(['guid' => $guid])->first();
+
+        return $data?$data->toArray():[];
     }
 
     protected function checkName($guid, $name): bool

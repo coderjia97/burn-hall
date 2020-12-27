@@ -16,9 +16,9 @@ class BaseModel extends Model
     public const UPDATED_AT = 'updateTime';
     public $dao;
 
-    public function get($guid)
+    public function get($id)
     {
-        $data = $this->dao->where(['guid' => $guid])->first();
+        $data = $this->dao->where(['id' => $id])->first();
         return $data?$data->toArray():'';
     }
 
