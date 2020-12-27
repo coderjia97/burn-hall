@@ -13,6 +13,8 @@ use App\Models\User\Dao\UserDao;
 use App\Models\User\Validator\UserValidator;
 use App\Toolkit\CharTools;
 use Illuminate\Support\Facades\Hash;
+use App\Toolkit\ArrayTools;
+
 
 class UserService extends BaseModel
 {
@@ -24,11 +26,21 @@ class UserService extends BaseModel
     public const STATUS_TRUE = 1;
     public const STATUS_FALSE = 0;
 
-    public function create($data)
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+
+        $this->dao = $this->getUserDao();
+    }
+
+    public function createUser($data): bool
     {
         $validator = new UserValidator();
         if (!$validator->scene('create')->check($data)) {
             throw new \InvalidArgumentException($validator->getError());
+        }
+        if ($this->getByName($data['name'])) {
+            throw new \InvalidArgumentException('用户名称已存在');
         }
 
         $data['salt'] = CharTools::getRandChar(16);
@@ -37,12 +49,121 @@ class UserService extends BaseModel
         $data['isAdmin'] = self::IS_ADMIN_FALSE;
         $data['status'] = self::STATUS_TRUE;
         $data['createUserId'] = $this->getCurrentUser()->getId();
-        $data['updateUserId'] = $this->getcurrentUser()->getId();
+        $data['updateUserId'] = $this->getCurrentUser()->getId();
 
-        $user = $this->getUserDao()->create($data);
-        $this->getLogService()->createTrace('创建用户', $user);
+        $this->getUserDao()->create($data);
+        $this->getLogService()->createTrace('创建:用户'.$data['name'], $data);
 
-        return $user;
+        return true;
+    }
+
+    public function getUser($id): array
+    {
+        $userInfo = $this->get($id);
+        if (!$userInfo) {
+            throw new \InvalidArgumentException('用户不存在');
+        }
+
+        return $userInfo;
+    }
+
+    public function updateUser($id,$data): bool
+    {
+        $validator = new UserValidator();
+        if (!$validator->scene('update')->check($data)) {
+            throw new \InvalidArgumentException($validator->getError());
+        }
+
+        $groupInfo = $this->get($id);
+        if (empty($groupInfo)) {
+            throw new \InvalidArgumentException('用户不存在');
+        }
+
+        $this->checkName($id, $data['name']);
+
+        $data = ArrayTools::parts($data,['name','email','password','salt','group','status']);
+        if(!empty($data['password'])){
+            $data['password'] = Hash::make(sha1(md5($data['salt'].config('app.salt').$data['password']).$data['salt']));
+        }
+        $data['updateUserId'] = $this->getCurrentUser()->getId();
+
+        $this->getUserDao()->where('id', $id)->update($data);
+        $this->getLogService()->createTrace('修改:用户'.$id,$data);
+
+        return true;
+    }
+
+    public function deleteUser($id): bool
+    {
+        if (!$this->get($id)) {
+            throw new \InvalidArgumentException('用户不存在');
+        }
+
+        $this->getUserDao()->where('id', $id)->delete();
+        $this->getLogService()->createTrace('删除:用户', $id);
+
+        return true;
+    }
+
+    public function modify($id): bool
+    {
+        $userInfo = $this->get($id);
+        if(empty($userInfo)){
+            throw new \InvalidArgumentException('用户不存在');
+        }
+        $data['status'] = 0 == $userInfo['status'] ? 1 : 0;
+
+        $result = $this->getUserDao()->where('id', $id)->update($data);
+        $this->getLogService()->createTrace('修改状态:用户'.$id,$data);
+
+        return $result;
+    }
+
+    public function searchByPagination($conditions, $orderBy): array
+    {
+        [$offset, $limit] = $this->getOffsetAndLimit();
+
+        $conditions = $this->prepareConditions($conditions);
+
+        $data = $this->search($conditions, $orderBy, $offset, $limit);
+        $count = $this->count($conditions);
+
+        return [
+            'data' => $data,
+            'paging' => [
+                'total' => $count,
+                'offset' => $offset,
+                'limit' => $limit,
+            ],
+        ];
+    }
+
+    protected function checkName($id, $name): bool
+    {
+        $group = $this->getByName($name);
+
+        if (!empty($group) && $group['id'] != $id) {
+            throw new \InvalidArgumentException('用户名称已存在');
+        }
+
+        return true;
+    }
+
+    protected function getByName($name):array
+    {
+        $userData = $this->getUserDao()->where(['name' => $name])->first();
+        return $userData?$userData->toArray():[];
+    }
+
+    protected function prepareConditions($conditions): array
+    {
+        $newConditions = [];
+
+        if (!empty($conditions['name'])) {
+            $newConditions[] = ['name', 'like', '%'.$conditions['name'].'%'];
+        }
+
+        return $newConditions;
     }
 
     private function getUserDao(): UserDao

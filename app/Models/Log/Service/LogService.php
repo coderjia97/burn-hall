@@ -35,6 +35,13 @@ class LogService extends BaseModel
         6 => 'Off',
     ];
 
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+
+        $this->dao = $this->getLogDao();
+    }
+
     public function create($message, $data = [], $level = self::TRACE)
     {
         $data = [
@@ -45,7 +52,7 @@ class LogService extends BaseModel
             'level' => $level,
         ];
 
-        $logCount = $this->getLogDao()->count();
+        $logCount = $this->count();
         $data['id'] = $logCount + 1;
 
         return $this->getLogDao()->create($data);

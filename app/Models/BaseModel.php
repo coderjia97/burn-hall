@@ -18,7 +18,8 @@ class BaseModel extends Model
 
     public function get($id)
     {
-        return $this->dao->where(['id' => $id])->first()->toArray();
+        $data = $this->dao->where(['id' => $id])->first();
+        return $data?$data->toArray():'';
     }
 
     public function search($conditions, $orders, $offset, $limit, $select = '*')
@@ -32,7 +33,7 @@ class BaseModel extends Model
         return $builder->skip($offset)->take($limit)->select($select)->get()->toArray();
     }
 
-    public function count($conditions)
+    public function count($conditions = [])
     {
         return $this->dao->where($conditions)->count();
     }

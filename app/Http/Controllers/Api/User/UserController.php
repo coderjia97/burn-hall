@@ -9,43 +9,46 @@ namespace App\Http\Controllers\Api\User;
 
 use App\Http\Controllers\Controller;
 use App\Models\User\Service\UserService;
+use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
-    public function get($id): string
+    public function get($id)
     {
-        $this->getUserService()->create([
-            'name' => 'test1',
-            'password' => '123',
-            'group' => 0,
-        ]);
+        $userInfo = $this->getUserService()->getUser($id);
 
-        return 'get';
+        return response()->json($userInfo);
     }
 
-    public function search(): string
+    public function search(Request $request)
     {
-        return 'search';
+        $conditions = $request->all();
+
+        return $this->getUserService()->searchByPagination($conditions, []);
     }
 
-    public function create()
+    public function create(Request $request)
     {
-        return 'create';
+        $data = $request->all();
+
+        return $this->getUserService()->createUser($data);
     }
 
-    public function update()
+    public function update($id,Request $request)
     {
-        return 'update';
+        $data = $request->all();
+
+        return $this->getUserService()->updateUser($id, $data);
     }
 
-    public function modify()
+    public function modify($id)
     {
-        return 'modify';
+        return $this->getUserService()->modify($id);
     }
 
-    public function delete()
+    public function delete($id)
     {
-        return 'delete';
+        return $this->getUserService()->deleteUser($id);
     }
 
     private function getUserService(): UserService
