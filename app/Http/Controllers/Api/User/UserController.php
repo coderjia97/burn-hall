@@ -13,9 +13,9 @@ use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
-    public function get($id)
+    public function get($guid)
     {
-        $userInfo = $this->getUserService()->getUser($id);
+        $userInfo = $this->getUserService()->getUser($guid);
 
         return response()->json($userInfo);
     }
@@ -34,21 +34,21 @@ class UserController extends Controller
         return $this->getUserService()->createUser($data);
     }
 
-    public function update($id,Request $request)
+    public function update($guid,Request $request)
     {
         $data = $request->all();
 
-        return $this->getUserService()->updateUser($id, $data);
+        return $this->getUserService()->updateUser($guid, $data);
     }
 
-    public function modify($id)
+    public function modify($guid)
     {
-        return $this->getUserService()->modify($id);
+        return $this->getUserService()->modify($guid);
     }
 
-    public function delete($id)
+    public function delete($guid)
     {
-        return $this->getUserService()->deleteUser($id);
+        return $this->getUserService()->deleteUser($guid);
     }
 
     private function getUserService(): UserService

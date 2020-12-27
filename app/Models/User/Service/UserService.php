@@ -57,9 +57,9 @@ class UserService extends BaseModel
         return true;
     }
 
-    public function getUser($id): array
+    public function getUser($guid): array
     {
-        $userInfo = $this->get($id);
+        $userInfo = $this->get($guid);
         if (!$userInfo) {
             throw new \InvalidArgumentException('用户不存在');
         }
@@ -67,19 +67,19 @@ class UserService extends BaseModel
         return $userInfo;
     }
 
-    public function updateUser($id,$data): bool
+    public function updateUser($guid,$data): bool
     {
         $validator = new UserValidator();
         if (!$validator->scene('update')->check($data)) {
             throw new \InvalidArgumentException($validator->getError());
         }
 
-        $groupInfo = $this->get($id);
+        $groupInfo = $this->get($guid);
         if (empty($groupInfo)) {
             throw new \InvalidArgumentException('用户不存在');
         }
 
-        $this->checkName($id, $data['name']);
+        $this->checkName($guid, $data['name']);
 
         $data = ArrayTools::parts($data,['name','email','password','salt','group','status']);
         if(!empty($data['password'])){
@@ -87,34 +87,34 @@ class UserService extends BaseModel
         }
         $data['updateUserId'] = $this->getCurrentUser()->getId();
 
-        $this->getUserDao()->where('id', $id)->update($data);
-        $this->getLogService()->createTrace('修改:用户'.$id,$data);
+        $this->getUserDao()->where('guid', $guid)->update($data);
+        $this->getLogService()->createTrace('修改:用户'.$guid,$data);
 
         return true;
     }
 
-    public function deleteUser($id): bool
+    public function deleteUser($guid): bool
     {
-        if (!$this->get($id)) {
+        if (!$this->get($guid)) {
             throw new \InvalidArgumentException('用户不存在');
         }
 
-        $this->getUserDao()->where('id', $id)->delete();
-        $this->getLogService()->createTrace('删除:用户', $id);
+        $this->getUserDao()->where('guid', $guid)->delete();
+        $this->getLogService()->createTrace('删除:用户', $guid);
 
         return true;
     }
 
-    public function modify($id): bool
+    public function modify($guid): bool
     {
-        $userInfo = $this->get($id);
+        $userInfo = $this->get($guid);
         if(empty($userInfo)){
             throw new \InvalidArgumentException('用户不存在');
         }
         $data['status'] = 0 == $userInfo['status'] ? 1 : 0;
 
-        $result = $this->getUserDao()->where('id', $id)->update($data);
-        $this->getLogService()->createTrace('修改状态:用户'.$id,$data);
+        $result = $this->getUserDao()->where('guid', $guid)->update($data);
+        $this->getLogService()->createTrace('修改状态:用户'.$guid,$data);
 
         return $result;
     }
@@ -138,11 +138,11 @@ class UserService extends BaseModel
         ];
     }
 
-    protected function checkName($id, $name): bool
+    protected function checkName($guid, $name): bool
     {
         $group = $this->getByName($name);
 
-        if (!empty($group) && $group['id'] != $id) {
+        if (!empty($group) && $group['guid'] != $guid) {
             throw new \InvalidArgumentException('用户名称已存在');
         }
 

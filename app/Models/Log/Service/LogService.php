@@ -52,7 +52,7 @@ class LogService extends BaseModel
             'level' => $level,
         ];
 
-        $logCount = $this->count();
+        $logCount = $this->count([]);
         $data['id'] = $logCount + 1;
 
         return $this->getLogDao()->create($data);

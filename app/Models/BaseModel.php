@@ -16,9 +16,9 @@ class BaseModel extends Model
     public const UPDATED_AT = 'updateTime';
     public $dao;
 
-    public function get($id)
+    public function get($guid)
     {
-        $data = $this->dao->where(['id' => $id])->first();
+        $data = $this->dao->where(['guid' => $guid])->first();
         return $data?$data->toArray():'';
     }
 
@@ -33,7 +33,7 @@ class BaseModel extends Model
         return $builder->skip($offset)->take($limit)->select($select)->get()->toArray();
     }
 
-    public function count($conditions = [])
+    public function count($conditions)
     {
         return $this->dao->where($conditions)->count();
     }
