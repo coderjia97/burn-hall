@@ -15,7 +15,7 @@ class UserController extends Controller
 {
     public function get($guid)
     {
-        $userInfo = $this->getUserService()->getUser($guid);
+        $userInfo = $this->getUserService()->getUserByGuid($guid);
 
         return response()->json($userInfo);
     }

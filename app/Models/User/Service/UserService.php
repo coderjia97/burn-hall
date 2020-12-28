@@ -57,7 +57,7 @@ class UserService extends BaseModel
         return true;
     }
 
-    public function getUser($guid): array
+    public function getUserByGuid($guid): array
     {
         $userInfo = $this->getUserInfo($guid);
         if (!$userInfo) {
@@ -111,7 +111,7 @@ class UserService extends BaseModel
         if(empty($userInfo)){
             throw new \InvalidArgumentException('用户不存在');
         }
-        $data['status'] = 0 == $userInfo['status'] ? 1 : 0;
+        $data['status'] = self::STATUS_FALSE == $userInfo['status'] ? self::STATUS_TRUE : self::STATUS_FALSE;
 
         $result = $this->getUserDao()->where('guid', $guid)->update($data);
         $this->getLogService()->createTrace('修改状态:用户'.$guid,$data);
