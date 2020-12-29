@@ -5,7 +5,7 @@
  * Author: Ogg <baoziyoo@gmail.com>
  */
 
-namespace App\Http\Controllers\Api\System;
+namespace App\Http\Controllers\Api\Admin\System;
 
 use App\Http\Controllers\Controller;
 
