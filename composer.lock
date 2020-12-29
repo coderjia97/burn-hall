@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c78bdc172535ebd5e4a6fb067a240a01",
+    "content-hash": "cc8b717914b760b3251632f52636e244",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -5822,6 +5822,59 @@
             "time": "2020-12-08T17:02:38+00:00"
         },
         {
+            "name": "tiben/crontab-manager",
+            "version": "v1.3.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/TiBeN/CrontabManager.git",
+                "reference": "1d331599a85eea3f50b1210686c27aaa2e06deb8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/TiBeN/CrontabManager/zipball/1d331599a85eea3f50b1210686c27aaa2e06deb8",
+                "reference": "1d331599a85eea3f50b1210686c27aaa2e06deb8",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "php": ">= 5.3"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4.8.36|^5.7"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "TiBeN\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Benjamin Legendre",
+                    "email": "legendre.benjamin@gmail.com"
+                }
+            ],
+            "description": "A library for managing linux cron jobs.",
+            "keywords": [
+                "crontab",
+                "scheduling"
+            ],
+            "support": {
+                "issues": "https://github.com/TiBeN/CrontabManager/issues",
+                "source": "https://github.com/TiBeN/CrontabManager/tree/master"
+            },
+            "time": "2018-10-17T16:26:00+00:00"
+        },
+        {
             "name": "tijsverkoyen/css-to-inline-styles",
             "version": "2.2.3",
             "source": {
@@ -9077,5 +9130,5 @@
         "ext-zip": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "1.1.0"
+    "plugin-api-version": "2.0.0"
 }
