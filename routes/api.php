@@ -35,8 +35,10 @@ if (!empty($_SERVER['HTTP_ACCEPT']) && $_SERVER['HTTP_ACCEPT'] === config('app.a
 
     $i = 0;
     foreach ($baseUrl as &$params) {
-        if (preg_match('/^\d+$/', $params) || preg_match('/(params:*+)/', $params)) {
+        if (preg_match('/^\d+$/', $params)) {
             $params = '{params'.++$i.'}';
+        } elseif (preg_match('/(params:*+)/', $params)) {
+            $params = 'params:{params'.++$i.'}';
         }
     }
     unset($params);

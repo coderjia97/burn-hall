@@ -16,6 +16,13 @@ class JobService extends BaseModel
     public const STATUS_TRUE = 1;
     public const STATUS_FALSE = 0;
 
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+
+        $this->dao = $this->getJobDao();
+    }
+
     public function getFirstJob()
     {
         return $this->getJobDao()
