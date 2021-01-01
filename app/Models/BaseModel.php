@@ -18,8 +18,9 @@ class BaseModel extends Model
 
     public function get($id)
     {
-        $data = $this->dao->where(['id' => $id])->first();
-        return $data?$data->toArray():'';
+        $result = $this->dao->where(['id' => $id])->first();
+
+        return empty($result) ? [] : $result->toArray();
     }
 
     public function search($conditions, $orders, $offset, $limit, $select = '*')

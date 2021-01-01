@@ -11,10 +11,9 @@ use App\Models\BaseModel;
 use App\Models\Log\Service\LogService;
 use App\Models\User\Dao\UserDao;
 use App\Models\User\Validator\UserValidator;
+use App\Toolkit\ArrayTools;
 use App\Toolkit\CharTools;
 use Illuminate\Support\Facades\Hash;
-use App\Toolkit\ArrayTools;
-
 
 class UserService extends BaseModel
 {
@@ -59,45 +58,41 @@ class UserService extends BaseModel
 
     public function getUserByGuid($guid): array
     {
-        $userInfo = $this->getUserInfo($guid);
-        if (!$userInfo) {
+        $userInfo = $this->getUserDao()->where(['guid' => $guid])->first();
+
+        if (empty($userInfo)) {
             throw new \InvalidArgumentException('用户不存在');
         }
 
-        return $userInfo;
+        return $userInfo->toArray();
     }
 
-    public function updateUser($guid,$data): bool
+    public function updateUser($guid, $data): bool
     {
         $validator = new UserValidator();
         if (!$validator->scene('update')->check($data)) {
             throw new \InvalidArgumentException($validator->getError());
         }
 
-        $groupInfo = $this->getUserInfo($guid);
-        if (empty($groupInfo)) {
-            throw new \InvalidArgumentException('用户不存在');
-        }
+        $this->getUserByGuid($guid);
 
         $this->checkName($guid, $data['name']);
 
-        $data = ArrayTools::parts($data,['name','email','password','salt','group','status']);
-        if(!empty($data['password'])){
+        $data = ArrayTools::parts($data, ['name', 'email', 'password', 'salt', 'group', 'status']);
+        if (!empty($data['password'])) {
             $data['password'] = Hash::make(sha1(md5($data['salt'].config('app.salt').$data['password']).$data['salt']));
         }
         $data['updateUserId'] = $this->getCurrentUser()->getId();
 
         $this->getUserDao()->where('guid', $guid)->update($data);
-        $this->getLogService()->createTrace('修改:用户'.$guid,$data);
+        $this->getLogService()->createTrace('修改:用户'.$guid, $data);
 
         return true;
     }
 
     public function deleteUser($guid): bool
     {
-        if (!$this->getUserInfo($guid)) {
-            throw new \InvalidArgumentException('用户不存在');
-        }
+        $this->getUserByGuid($guid);
 
         $this->getUserDao()->where('guid', $guid)->delete();
         $this->getLogService()->createTrace('删除:用户', $guid);
@@ -107,14 +102,12 @@ class UserService extends BaseModel
 
     public function modify($guid): bool
     {
-        $userInfo = $this->getUserInfo($guid);
-        if(empty($userInfo)){
-            throw new \InvalidArgumentException('用户不存在');
-        }
+        $userInfo = $this->getUserByGuid($guid);
+
         $data['status'] = self::STATUS_FALSE == $userInfo['status'] ? self::STATUS_TRUE : self::STATUS_FALSE;
 
         $result = $this->getUserDao()->where('guid', $guid)->update($data);
-        $this->getLogService()->createTrace('修改状态:用户'.$guid,$data);
+        $this->getLogService()->createTrace('修改状态:用户'.$guid, $data);
 
         return $result;
     }
@@ -125,7 +118,7 @@ class UserService extends BaseModel
 
         $conditions = $this->prepareConditions($conditions);
 
-        $data = $this->search($conditions, $orderBy, $offset, $limit);
+        $data = $this->search($conditions, $orderBy, $offset, $limit)->setAppends(['id']);
         $count = $this->count($conditions);
 
         return [
@@ -136,13 +129,6 @@ class UserService extends BaseModel
                 'limit' => $limit,
             ],
         ];
-    }
-
-    protected function getUserInfo($guid): array
-    {
-        $data = $this->dao->where(['guid' => $guid])->first();
-
-        return $data?$data->toArray():[];
     }
 
     protected function checkName($guid, $name): bool
@@ -156,10 +142,11 @@ class UserService extends BaseModel
         return true;
     }
 
-    protected function getByName($name):array
+    protected function getByName($name): array
     {
         $userData = $this->getUserDao()->where(['name' => $name])->first();
-        return $userData?$userData->toArray():[];
+
+        return $userData ? $userData->toArray() : [];
     }
 
     protected function prepareConditions($conditions): array

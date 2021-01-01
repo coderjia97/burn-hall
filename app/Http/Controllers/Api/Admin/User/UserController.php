@@ -5,7 +5,7 @@
  * Author: Ogg <baoziyoo@gmail.com>
  */
 
-namespace App\Http\Controllers\Api\User;
+namespace App\Http\Controllers\Api\Admin\User;
 
 use App\Http\Controllers\Controller;
 use App\Models\User\Service\UserService;
@@ -34,7 +34,7 @@ class UserController extends Controller
         return $this->getUserService()->createUser($data);
     }
 
-    public function update($guid,Request $request)
+    public function update($guid, Request $request)
     {
         $data = $request->all();
 

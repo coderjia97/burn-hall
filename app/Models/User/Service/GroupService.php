@@ -51,11 +51,11 @@ class GroupService extends BaseModel
 
         $this->checkName($id, $data['name']);
 
-        $data = ArrayTools::parts($data,['name','rules']);
+        $data = ArrayTools::parts($data, ['name', 'rules']);
         $data['updateUserId'] = $this->getCurrentUser()->getId();
 
         $this->getGroupDao()->where('id', $id)->update($data);
-        $this->getLogService()->createTrace('修改:用户组'.$id,$data);
+        $this->getLogService()->createTrace('修改:用户组'.$id, $data);
 
         return true;
     }
@@ -94,6 +94,7 @@ class GroupService extends BaseModel
     public function getGroup($id)
     {
         $groupInfo = $this->get($id);
+
         if (!$groupInfo) {
             throw new \InvalidArgumentException('用户组不存在');
         }
