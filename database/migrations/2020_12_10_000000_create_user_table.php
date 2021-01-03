@@ -28,6 +28,7 @@ class CreateUserTable extends Migration
             $table->unsignedInteger('createUserId')->nullable()->comment('创建用户');
             $table->timestamp('updateTime')->nullable()->comment('更新时间');
             $table->unsignedInteger('updateUserId')->nullable()->comment('更新用户');
+            $table->timestamp('deleteTime')->nullable()->comment('删除时间');
         });
     }
 
