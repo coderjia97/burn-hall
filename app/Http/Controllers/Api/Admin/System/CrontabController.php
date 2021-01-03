@@ -8,6 +8,7 @@
 namespace App\Http\Controllers\Api\Admin\System;
 
 use App\Http\Controllers\Controller;
+use App\Models\Job\Service\JobService;
 use App\Models\System\Service\CrontabService;
 use Illuminate\Http\Request;
 
@@ -26,6 +27,7 @@ class CrontabController extends Controller
 
         $initConfig = $this->getInitCrontab();
         $this->getCrontabService()->createCrontab($initConfig['time'], $initConfig['command'], $initConfig['logPath'], $enforce);
+        $this->getJobService()->refreshJob();
 
         return true;
     }
@@ -42,5 +44,10 @@ class CrontabController extends Controller
     private function getCrontabService(): CrontabService
     {
         return $this->getService('System:CrontabService');
+    }
+
+    private function getJobService(): JobService
+    {
+        return $this->getService('Job:JobService');
     }
 }

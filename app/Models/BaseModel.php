@@ -17,7 +17,7 @@ class BaseModel extends Model
     public const DELETED_AT = 'deleteTime';
     public $dao;
 
-    public function get($id)
+    public function getById($id)
     {
         $result = $this->dao->where(['id' => $id])->first();
 

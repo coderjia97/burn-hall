@@ -9,7 +9,12 @@ namespace App\Models\Job;
 
 abstract class AbstractJob
 {
-    abstract public function execute($args = []);
+    public $expression;
+    public $name;
+    public $args = [];
+    public $status = true;
+
+    abstract public function execute($args = []): bool;
 
     protected function getService($service, $version = '')
     {

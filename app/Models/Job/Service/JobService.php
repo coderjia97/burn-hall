@@ -49,6 +49,74 @@ class JobService extends BaseModel
             ->update($data);
     }
 
+    public function refreshJob()
+    {
+        $basePath = base_path().'/app/Models/';
+        $models = scandir($basePath);
+        $jobClasses = [];
+        foreach ($models as $model) {
+            $jobPath = $basePath.$model.'/Job';
+            if ('..' != $model && '.' != $model && is_dir($jobPath)) {
+                foreach (scandir($jobPath) as $job) {
+                    if (preg_match('/.+Job\.php$/', $job)) {
+                        $jobClasses[] = '\App\Models\\'.$model.'\Job\\'.str_replace('.php', '', $job);
+                    }
+                }
+            }
+        }
+
+        foreach ($jobClasses as $jobName) {
+            $obj = new $jobName();
+            $job = $this->getByClass(substr($jobName, 1));
+            if (empty($job)) {
+                $cron = new CronExpression($obj->expression);
+
+                $this->getJobDao()->create([
+                    'name' => $obj->name,
+                    'expression' => $obj->expression,
+                    'class' => substr($jobName, 1),
+                    'args' => json_encode($obj->args),
+                    'nextExecutionTime' => $cron->getNextRunDate()->format('Y-m-d H:i:s'),
+                    'lastExecutionTime' => null,
+                    'status' => $obj->status,
+                ]);
+                continue;
+            }
+
+            $cron = new CronExpression($obj->expression);
+
+            $this->getJobDao()->where('id', $job['id'])->update([
+                'name' => $obj->name,
+                'expression' => $obj->expression,
+                'class' => substr($jobName, 1),
+                'args' => json_encode($obj->args),
+                'nextExecutionTime' => $cron->getNextRunDate()->format('Y-m-d H:i:s'),
+                'lastExecutionTime' => null,
+                'status' => $obj->status,
+            ]);
+        }
+
+        $jobs = $this->getJobDao()->get()->toArray();
+        $oldJobClasses = array_map(function ($class) {
+            return '\\'.$class;
+        }, array_column($jobs, 'class'));
+
+        $diffClass = array_diff($oldJobClasses, $jobClasses);
+
+        foreach ($jobs as $job) {
+            if (in_array('\\'.$job['class'], $diffClass)) {
+                $this->getJobDao()->where('id', $job['id'])->delete();
+            }
+        }
+    }
+
+    public function getByClass($class): array
+    {
+        $job = $this->getJobDao()->where(['class' => $class])->first();
+
+        return $job ? $job->toArray() : [];
+    }
+
     private function getJobDao(): JobDao
     {
         return $this->getDao('Job:JobDao');
