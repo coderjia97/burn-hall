@@ -7,12 +7,16 @@
 
 namespace App\Http\Controllers\Api\Admin\User;
 
+use App\Http\Controllers\Api\Annotation\ResponseFilter;
 use App\Http\Controllers\Controller;
 use App\Models\User\Service\UserService;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
+    /**
+     * @ResponseFilter(class="\App\Http\Controllers\Api\Admin\User\Filter\UserFilter", mode="simple")
+     */
     public function get($guid)
     {
         $userInfo = $this->getUserService()->getUserByGuid($guid);
