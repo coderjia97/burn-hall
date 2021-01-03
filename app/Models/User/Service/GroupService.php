@@ -3,6 +3,7 @@
 namespace App\Models\User\Service;
 
 use App\Models\BaseModel;
+use App\Models\Log\Service\LogService;
 use App\Models\User\Dao\GroupDao;
 use App\Models\User\Validator\GroupValidator;
 use App\Toolkit\ArrayTools;
@@ -24,13 +25,14 @@ class GroupService extends BaseModel
         }
 
         if ($this->getByName($data['name'])) {
-            throw new \InvalidArgumentException('角色名称已存在');
+            throw new \InvalidArgumentException('用户组已存在');
         }
 
         $data['createUserId'] = $this->getCurrentUser()->getId();
         $data['updateUserId'] = $this->getCurrentUser()->getId();
 
         $this->getGroupDao()->create($data);
+        $this->getLogService()->createTrace('创建:用户组'.$data['name'], $data);
 
         return true;
     }
@@ -44,15 +46,16 @@ class GroupService extends BaseModel
 
         $groupInfo = $this->get($id);
         if (empty($groupInfo)) {
-            throw new \InvalidArgumentException('角色不存在');
+            throw new \InvalidArgumentException('用户组不存在');
         }
 
         $this->checkName($id, $data['name']);
 
-        $data = ArrayTools::parts($data,['name','rules']);
+        $data = ArrayTools::parts($data, ['name', 'rules']);
         $data['updateUserId'] = $this->getCurrentUser()->getId();
 
         $this->getGroupDao()->where('id', $id)->update($data);
+        $this->getLogService()->createTrace('修改:用户组'.$id, $data);
 
         return true;
     }
@@ -60,10 +63,11 @@ class GroupService extends BaseModel
     public function deleteGroup($id): bool
     {
         if (!$this->get($id)) {
-            throw new \InvalidArgumentException('角色不存在');
+            throw new \InvalidArgumentException('用户组不存在');
         }
 
         $this->getGroupDao()->where('id', $id)->delete();
+        $this->getLogService()->createTrace('删除:用户组', $id);
 
         return true;
     }
@@ -90,8 +94,9 @@ class GroupService extends BaseModel
     public function getGroup($id)
     {
         $groupInfo = $this->get($id);
+
         if (!$groupInfo) {
-            throw new \InvalidArgumentException('角色不存在');
+            throw new \InvalidArgumentException('用户组不存在');
         }
 
         return $groupInfo;
@@ -113,7 +118,7 @@ class GroupService extends BaseModel
         $group = $this->getByName($name);
 
         if (!empty($group) && $group['id'] != $id) {
-            throw new \InvalidArgumentException('角色名称已存在');
+            throw new \InvalidArgumentException('用户组已存在');
         }
 
         return true;
@@ -127,5 +132,10 @@ class GroupService extends BaseModel
     private function getGroupDao(): GroupDao
     {
         return $this->getDao('User:GroupDao');
+    }
+
+    private function getLogService(): LogService
+    {
+        return $this->getService('Log:LogService');
     }
 }

@@ -14,11 +14,14 @@ class BaseModel extends Model
 {
     public const CREATED_AT = 'createTime';
     public const UPDATED_AT = 'updateTime';
+    public const DELETED_AT = 'deleteTime';
     public $dao;
 
     public function get($id)
     {
-        return $this->dao->where(['id' => $id])->first()->toArray();
+        $result = $this->dao->where(['id' => $id])->first();
+
+        return empty($result) ? [] : $result->toArray();
     }
 
     public function search($conditions, $orders, $offset, $limit, $select = '*')

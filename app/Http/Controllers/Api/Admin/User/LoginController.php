@@ -5,7 +5,7 @@
  * Author: Ogg <baoziyoo@gmail.com>
  */
 
-namespace App\Http\Controllers\Api\User;
+namespace App\Http\Controllers\Api\Admin\User;
 
 use App\Exceptions\Exception;
 use App\Http\Controllers\Controller;
