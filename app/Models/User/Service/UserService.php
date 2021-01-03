@@ -118,7 +118,7 @@ class UserService extends BaseModel
 
         $conditions = $this->prepareConditions($conditions);
 
-        $data = $this->search($conditions, $orderBy, $offset, $limit)->setAppends(['id']);
+        $data = $this->search($conditions, $orderBy, $offset, $limit);
         $count = $this->count($conditions);
 
         return [

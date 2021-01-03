@@ -14,6 +14,7 @@ class BaseModel extends Model
 {
     public const CREATED_AT = 'createTime';
     public const UPDATED_AT = 'updateTime';
+    public const DELETED_AT = 'deleteTime';
     public $dao;
 
     public function get($id)

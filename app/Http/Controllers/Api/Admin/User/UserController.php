@@ -41,20 +41,17 @@ class UserController extends Controller
         return $this->getUserService()->updateUser($guid, $data);
     }
 
-    public
-    function modify($guid)
+    public function modify($guid)
     {
         return $this->getUserService()->modify($guid);
     }
 
-    public
-    function delete($guid)
+    public function delete($guid)
     {
         return $this->getUserService()->deleteUser($guid);
     }
 
-    private
-    function getUserService(): UserService
+    private function getUserService(): UserService
     {
         return $this->getService('User:UserService');
     }
