@@ -7,10 +7,17 @@
 
 namespace App\Models\Job\Job;
 
-class TestJob
+use App\Models\Job\AbstractJob;
+
+class TestJob extends AbstractJob
 {
-    public function execute()
+    public $expression = '*/1 * * * *';
+    public $name = 'test1';
+
+    public function execute($args = []): bool
     {
         echo 'test job';
+
+        return true;
     }
 }

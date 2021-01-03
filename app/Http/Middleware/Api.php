@@ -7,7 +7,9 @@
 
 namespace App\Http\Middleware;
 
+use App\Http\Controllers\Api\Annotation\ResponseFilter;
 use Closure;
+use Doctrine\Common\Annotations\AnnotationReader;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -40,6 +42,39 @@ class Api
             Log::channel('api_error_log')->error($info);
         }
 
+        $this->annotationReader($request, $response);
+
         return $response;
+    }
+
+    protected function annotationReader($request, $response)
+    {
+        $controller = $request->route()->getController();
+        $class = new \ReflectionClass($controller);
+        $method = $class->getMethod($request->route()->getActionMethod());
+        $reader = new AnnotationReader();
+        foreach ($reader->getMethodAnnotations($method) as $annotation) {
+            switch (get_class($annotation)) {
+                case ResponseFilter::class:
+                    return $this->responseFilter($annotation, $response);
+                default:
+                    return null;
+            }
+        }
+    }
+
+    private function responseFilter($annotation, $response)
+    {
+        $content = $response->getContent();
+        $class = $annotation->getClass();
+        $fieldFilter = new $class();
+        $mode = $annotation->getMode();
+        if ($mode) {
+            $fieldFilter->setMode($mode);
+        }
+
+        $response->setContent($fieldFilter->filter($content));
+
+        return null;
     }
 }

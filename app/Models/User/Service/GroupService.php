@@ -44,7 +44,7 @@ class GroupService extends BaseModel
             throw new \InvalidArgumentException($validator->getError());
         }
 
-        $groupInfo = $this->get($id);
+        $groupInfo = $this->getById($id);
         if (empty($groupInfo)) {
             throw new \InvalidArgumentException('用户组不存在');
         }
@@ -62,7 +62,7 @@ class GroupService extends BaseModel
 
     public function deleteGroup($id): bool
     {
-        if (!$this->get($id)) {
+        if (!$this->getById($id)) {
             throw new \InvalidArgumentException('用户组不存在');
         }
 
@@ -93,7 +93,7 @@ class GroupService extends BaseModel
 
     public function getGroup($id)
     {
-        $groupInfo = $this->get($id);
+        $groupInfo = $this->getById($id);
 
         if (!$groupInfo) {
             throw new \InvalidArgumentException('用户组不存在');
