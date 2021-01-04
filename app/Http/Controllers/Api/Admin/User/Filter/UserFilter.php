@@ -7,7 +7,7 @@
 
 namespace App\Http\Controllers\Api\Admin\User\Filter;
 
-use App\Http\Controllers\Api\Filter;
+use App\Http\Controllers\Api\Annotation\Filter;
 
 class UserFilter extends Filter
 {

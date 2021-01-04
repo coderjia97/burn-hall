@@ -7,11 +7,8 @@
 
 namespace App\Models\Log\Dao;
 
-use App\Models\BaseModel;
+use App\Models\BaseDaoInterface;
 
-class LogDao extends BaseModel
+interface LogDao extends BaseDaoInterface
 {
-    protected $guarded = [];
-    protected $table = 'log';
-    public const UPDATED_AT = null;
 }

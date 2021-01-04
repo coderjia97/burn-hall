@@ -12,6 +12,13 @@ use App\Models\Job\Service\JobService;
 
 class JobController extends Controller
 {
+    public function get($id)
+    {
+        echo '<pre>';
+        print_r($id);
+        echo '</pre>';
+    }
+
     public function search()
     {
         return $this->getJobService()->search([], [], 0, PHP_INT_MAX);
@@ -19,6 +26,6 @@ class JobController extends Controller
 
     private function getJobService(): JobService
     {
-        return $this->getService('Job:JobService');
+        return $this->getService('Job:Job');
     }
 }

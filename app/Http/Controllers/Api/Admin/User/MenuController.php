@@ -14,6 +14,6 @@ class MenuController extends Controller
 
     private function getMenuService(): MenuService
     {
-        return $this->getService('User:MenuService');
+        return $this->getService('User:Menu');
     }
 }

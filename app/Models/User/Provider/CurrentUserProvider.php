@@ -46,4 +46,9 @@ class CurrentUserProvider
     {
         return $this->id;
     }
+
+    public function getForm()
+    {
+        return $this->form;
+    }
 }

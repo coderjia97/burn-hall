@@ -34,6 +34,7 @@ class Jwt implements Firewall
         // todo 完善登录用户信息
         resolve('user')->setUser([
             'id' => '111',
+            'form' => 'jwt',
         ]);
 
         return true;
@@ -41,6 +42,6 @@ class Jwt implements Firewall
 
     private function getJwtModel(): \App\Models\Jwt\Service\JwtService
     {
-        return app('modelHelper')->getService('Jwt:JwtService');
+        return app('modelHelper')->getService('Jwt:Jwt');
     }
 }

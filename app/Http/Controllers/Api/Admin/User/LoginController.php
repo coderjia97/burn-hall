@@ -44,6 +44,6 @@ class LoginController extends Controller
 
     private function getJwtModel(): \App\Models\Jwt\Service\JwtService
     {
-        return $this->getService('Jwt:JwtService');
+        return $this->getService('Jwt:Jwt');
     }
 }

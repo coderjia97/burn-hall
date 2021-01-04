@@ -9,7 +9,7 @@ namespace App\Helper;
 
 class ModelHelper
 {
-    protected $dir = '\App\Models\%s%s\%s\%s';
+    protected $dir = '\App\Models\%s%s\%s\Impl\%sImpl';
 
     public function getService($service, $version = '')
     {
@@ -19,7 +19,7 @@ class ModelHelper
             app()->singleton($service, function ($app) use ($service, $version) {
                 [$dir, $file] = explode(':', $service);
                 $version = $version ? '\\'.$version.'\\' : '';
-                $class = sprintf($this->dir, $dir, $version, 'Service', $file);
+                $class = sprintf($this->dir, $dir, $version, 'Service', $file.'Service');
 
                 return new $class();
             });
@@ -36,7 +36,7 @@ class ModelHelper
             app()->singleton($service, function ($app) use ($service, $version) {
                 [$dir, $file] = explode(':', $service);
                 $version = $version ? '\\'.$version.'\\' : '';
-                $class = sprintf($this->dir, $dir, $version, 'Dao', $file);
+                $class = sprintf($this->dir, $dir, $version, 'Dao', $file.'Dao');
 
                 return new $class();
             });

@@ -43,6 +43,6 @@ class GroupController extends Controller
 
     private function getGroupService(): GroupService
     {
-        return $this->getService('User:GroupService');
+        return $this->getService('User:Group');
     }
 }
