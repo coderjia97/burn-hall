@@ -57,6 +57,6 @@ class UserController extends Controller
 
     private function getUserService(): UserService
     {
-        return $this->getService('User:UserService');
+        return $this->getService('User:User');
     }
 }

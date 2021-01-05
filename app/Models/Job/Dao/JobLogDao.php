@@ -7,11 +7,8 @@
 
 namespace App\Models\Job\Dao;
 
-use App\Models\BaseModel;
+use App\Models\BaseDaoInterface;
 
-class JobLogDao extends BaseModel
+interface JobLogDao extends BaseDaoInterface
 {
-    protected $guarded = [];
-    protected $table = 'job_log';
-    public const UPDATED_AT = null;
 }

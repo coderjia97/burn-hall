@@ -15,6 +15,7 @@ class Test implements Firewall
     {
         resolve('user')->setUser([
             'id' => '111',
+            'form' => 'test',
         ]);
 
         return true;

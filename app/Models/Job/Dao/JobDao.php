@@ -7,10 +7,8 @@
 
 namespace App\Models\Job\Dao;
 
-use App\Models\BaseModel;
+use App\Models\BaseDaoInterface;
 
-class JobDao extends BaseModel
+interface JobDao extends BaseDaoInterface
 {
-    protected $guarded = [];
-    protected $table = 'job';
 }
