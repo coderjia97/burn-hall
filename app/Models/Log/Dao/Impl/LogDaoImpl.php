@@ -7,10 +7,10 @@
 
 namespace App\Models\Log\Dao\Impl;
 
-use App\Models\BaseModel;
+use App\Models\BaseDao;
 use App\Models\Log\Dao\LogDao;
 
-class LogDaoImpl extends BaseModel implements LogDao
+class LogDaoImpl extends BaseDao implements LogDao
 {
     protected $guarded = [];
     protected $table = 'log';

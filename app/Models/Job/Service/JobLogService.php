@@ -14,4 +14,6 @@ interface JobLogService extends BaseServiceInterface
     public function createSuccessLog($jobName, $jobExpression, $jobClass, $parentId, $args, $costTime);
 
     public function createFailureLog($jobName, $jobExpression, $jobClass, $parentId, $args, $costTime, $trace);
+
+    public function getJobLogs($jobId);
 }

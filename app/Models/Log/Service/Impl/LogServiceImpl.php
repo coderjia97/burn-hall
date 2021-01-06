@@ -7,11 +7,11 @@
 
 namespace App\Models\Log\Service\Impl;
 
-use App\Models\BaseModel;
+use App\Models\BaseService;
 use App\Models\Log\Dao\LogDao;
 use App\Models\Log\Service\LogService;
 
-class LogServiceImpl extends BaseModel implements LogService
+class LogServiceImpl extends BaseService implements LogService
 {
     public const TRACE = 1;
     public const DEBUG = 2;
@@ -34,13 +34,6 @@ class LogServiceImpl extends BaseModel implements LogService
         // 提前结束
         6 => 'Off',
     ];
-
-    public function __construct(array $attributes = [])
-    {
-        parent::__construct($attributes);
-
-        $this->dao = $this->getLogDao();
-    }
 
     public function create($message, $data = [], $level = self::TRACE)
     {

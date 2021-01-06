@@ -7,11 +7,11 @@
 
 namespace App\Models\Job\Service\Impl;
 
-use App\Models\BaseModel;
+use App\Models\BaseService;
 use App\Models\Job\Dao\JobLogDao;
 use App\Models\Job\Service\JobLogService;
 
-class JobLogServiceImpl extends BaseModel implements JobLogService
+class JobLogServiceImpl extends BaseService implements JobLogService
 {
     public const RESULTED_TRUE = 1;
     public const RESULTED_FALSE = 0;
@@ -42,6 +42,15 @@ class JobLogServiceImpl extends BaseModel implements JobLogService
             'trace' => $trace,
             'costTime' => $costTime,
         ]);
+    }
+
+    public function getJobLogs($jobId)
+    {
+        $conditions = [
+            ['parentId', '=', $jobId],
+        ];
+
+        return $this->getJobLogDao()->searchByPagination($conditions);
     }
 
     private function getJobLogDao(): JobLogDao

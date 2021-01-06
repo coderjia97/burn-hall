@@ -56,16 +56,16 @@ class Api
         foreach ($reader->getMethodAnnotations($method) as $annotation) {
             switch (get_class($annotation)) {
                 case ResponseFilter::class:
-                    return $this->responseFilter($annotation, $response);
+                    return $this->responseFilter($annotation, $response, $request);
                 default:
                     return null;
             }
         }
     }
 
-    private function responseFilter($annotation, $response)
+    private function responseFilter($annotation, $response, $request)
     {
-        $content = $response->getContent();
+        $content = json_decode($response->getContent(), true);
         $class = $annotation->getClass();
         $fieldFilter = new $class();
         $mode = $annotation->getMode();
@@ -73,7 +73,16 @@ class Api
             $fieldFilter->setMode($mode);
         }
 
-        $response->setContent($fieldFilter->filter($content));
+        switch ($request->route()->getActionMethod()) {
+            case 'get':
+                $data = $fieldFilter->filter($content);
+                break;
+            case 'search':
+                $data = $fieldFilter->filters($content);
+                break;
+        }
+
+        $response->setContent(json_encode($data));
 
         return null;
     }

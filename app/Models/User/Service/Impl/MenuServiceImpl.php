@@ -2,11 +2,11 @@
 
 namespace App\Models\User\Service\Impl;
 
-use App\Models\BaseModel;
+use App\Models\BaseService;
 use App\Models\User\Service\MenuService;
 use Symfony\Component\Yaml\Yaml;
 
-class MenuServiceImpl extends BaseModel implements MenuService
+class MenuServiceImpl extends BaseService implements MenuService
 {
     public function listMenu()
     {

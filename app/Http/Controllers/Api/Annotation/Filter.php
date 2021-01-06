@@ -21,9 +21,8 @@ abstract class Filter
     public function filter($data)
     {
         if (!$data) {
-            return json_encode([]);
+            return [];
         }
-        $data = json_decode($data, true);
 
         foreach ([self::SIMPLE_MODE] as $mode) {
             $property = $mode.'Fields';
@@ -35,23 +34,25 @@ abstract class Filter
             }
         }
 
-        return json_encode($data);
+        return $data;
     }
 
-//    public function filters(&$dataSet)
-//    {
-//        if (!$dataSet) {
-//            return;
-//        }
-//
-//        if (array_key_exists('data', $dataSet) && array_key_exists('paging', $dataSet)) {
-//            foreach ($dataSet['data'] as &$data) {
-//                $this->filter($data);
-//            }
-//        } else {
-//            foreach ($dataSet as &$data) {
-//                $this->filter($data);
-//            }
-//        }
-//    }
+    public function filters(&$dataSet)
+    {
+        if (!$dataSet) {
+            return [];
+        }
+
+        if (array_key_exists('data', $dataSet) && array_key_exists('paging', $dataSet)) {
+            foreach ($dataSet['data'] as &$data) {
+                $data = $this->filter($data);
+            }
+        } else {
+            foreach ($dataSet as &$data) {
+                $data = $this->filter($data);
+            }
+        }
+
+        return $dataSet;
+    }
 }

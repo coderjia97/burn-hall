@@ -7,31 +7,28 @@
 
 namespace App\Models\Job\Service\Impl;
 
-use App\Models\BaseModel;
+use App\Models\BaseService;
 use App\Models\Job\Dao\JobDao;
 use App\Models\Job\Service\JobService;
+use App\Toolkit\ArrayTools;
 use Cron\CronExpression;
 
-class JobServiceImpl extends BaseModel implements JobService
+class JobServiceImpl extends BaseService implements JobService
 {
     public const STATUS_TRUE = 1;
     public const STATUS_FALSE = 0;
 
-    public function __construct(array $attributes = [])
+    public function get($id)
     {
-        parent::__construct($attributes);
-
-        $this->dao = $this->getJobDao();
+        return $this->getJobDao()->getById($id);
     }
 
     public function getFirstJob()
     {
-        return $this->getJobDao()
-            ->where([
-                ['nextExecutionTime', '<=', date('Y-m-d H:i:s')],
-                ['status', '=', self::STATUS_TRUE],
-            ])
-            ->first();
+        return $this->getJobDao()->where([
+            ['nextExecutionTime', '<=', date('Y-m-d H:i:s')],
+            ['status', '=', self::STATUS_TRUE],
+        ])->first();
     }
 
     public function setNextTime($job, $isExecution = false)
@@ -43,11 +40,9 @@ class JobServiceImpl extends BaseModel implements JobService
             $data['lastExecutionTime'] = date('Y-m-d H:i:s');
         }
 
-        return $this->getJobDao()
-            ->where([
-                ['id', '=', $job['id']],
-            ])
-            ->update($data);
+        return $this->getJobDao()->where([
+            ['id', '=', $job['id']],
+        ])->update($data);
     }
 
     public function refreshJob()
@@ -116,6 +111,29 @@ class JobServiceImpl extends BaseModel implements JobService
         $job = $this->getJobDao()->where(['class' => $class])->first();
 
         return $job ? $job->toArray() : [];
+    }
+
+    public function updateStatus($id, $status): bool
+    {
+        return $this->getJobDao()->where('id', $id)->update(['status' => $status]);
+    }
+
+    public function searchByPagination($conditions)
+    {
+        $conditions = $this->prepareConditions($conditions);
+
+        return $this->getJobDao()->searchByPagination($conditions);
+    }
+
+    protected function prepareConditions($conditions)
+    {
+        $conditions = ArrayTools::removeNull($conditions);
+        $newConditions = [];
+        if (isset($conditions['name']) && !empty($conditions['name'])) {
+            $newConditions[] = ['name', 'like', '%'.$conditions['name'].'%'];
+        }
+
+        return $newConditions;
     }
 
     private function getJobDao(): JobDao

@@ -2,20 +2,23 @@
 
 namespace App\Models\User\Service\Impl;
 
-use App\Models\BaseModel;
+use App\Models\BaseService;
 use App\Models\Log\Service\LogService;
 use App\Models\User\Dao\GroupDao;
 use App\Models\User\Service\GroupService;
 use App\Models\User\Validator\GroupValidator;
 use App\Toolkit\ArrayTools;
 
-class GroupServiceImpl extends BaseModel implements GroupService
+class GroupServiceImpl extends BaseService implements GroupService
 {
-    public function __construct(array $attributes = [])
+    public function get($id)
     {
-        parent::__construct($attributes);
+        $group = $this->getGroupDao()->getById($id);
+        if (!$group) {
+            throw new \InvalidArgumentException('用户组不存在');
+        }
 
-        $this->dao = $this->getGroupDao();
+        return $group;
     }
 
     public function createGroup($data): bool
@@ -45,7 +48,7 @@ class GroupServiceImpl extends BaseModel implements GroupService
             throw new \InvalidArgumentException($validator->getError());
         }
 
-        $groupInfo = $this->getById($id);
+        $groupInfo = $this->get($id);
         if (empty($groupInfo)) {
             throw new \InvalidArgumentException('用户组不存在');
         }
@@ -63,10 +66,6 @@ class GroupServiceImpl extends BaseModel implements GroupService
 
     public function deleteGroup($id): bool
     {
-        if (!$this->getById($id)) {
-            throw new \InvalidArgumentException('用户组不存在');
-        }
-
         $this->getGroupDao()->where('id', $id)->delete();
         $this->getLogService()->createTrace('删除:用户组', $id);
 
@@ -75,37 +74,15 @@ class GroupServiceImpl extends BaseModel implements GroupService
 
     public function searchByPagination($conditions, $orderBy): array
     {
-        [$offset, $limit] = $this->getOffsetAndLimit();
-
         $conditions = $this->prepareConditions($conditions);
 
-        $data = $this->search($conditions, $orderBy, $offset, $limit);
-        $count = $this->count($conditions);
-
-        return [
-            'data' => $data,
-            'paging' => [
-                'total' => $count,
-                'offset' => $offset,
-                'limit' => $limit,
-            ],
-        ];
-    }
-
-    public function getGroup($id)
-    {
-        $groupInfo = $this->getById($id);
-
-        if (!$groupInfo) {
-            throw new \InvalidArgumentException('用户组不存在');
-        }
-
-        return $groupInfo;
+        return $this->getGroupDao()->searchByPagination($conditions, $orderBy);
     }
 
     protected function prepareConditions($conditions): array
     {
         $newConditions = [];
+        $conditions = ArrayTools::removeNull($conditions);
 
         if (!empty($conditions['name'])) {
             $newConditions[] = ['name', 'like', '%'.$conditions['name'].'%'];

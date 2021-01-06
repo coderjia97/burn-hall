@@ -13,6 +13,7 @@ class TestJob extends AbstractJob
 {
     public $expression = '*/1 * * * *';
     public $name = 'test1';
+    public $status = false;
 
     public function execute($args = []): bool
     {

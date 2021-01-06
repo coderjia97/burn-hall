@@ -7,7 +7,7 @@
 
 namespace App\Models\User\Service\Impl;
 
-use App\Models\BaseModel;
+use App\Models\BaseService;
 use App\Models\Log\Service\LogService;
 use App\Models\User\Dao\UserDao;
 use App\Models\User\Service\UserService;
@@ -16,7 +16,7 @@ use App\Toolkit\ArrayTools;
 use App\Toolkit\CharTools;
 use Illuminate\Support\Facades\Hash;
 
-class UserServiceImpl extends BaseModel implements UserService
+class UserServiceImpl extends BaseService implements UserService
 {
     // 是否为管理员
     public const IS_ADMIN_TRUE = 1;
@@ -25,13 +25,6 @@ class UserServiceImpl extends BaseModel implements UserService
     // 状态
     public const STATUS_TRUE = 1;
     public const STATUS_FALSE = 0;
-
-    public function __construct(array $attributes = [])
-    {
-        parent::__construct($attributes);
-
-        $this->dao = $this->getUserDao();
-    }
 
     public function createUser($data): bool
     {
@@ -93,8 +86,6 @@ class UserServiceImpl extends BaseModel implements UserService
 
     public function deleteUser($guid): bool
     {
-        $this->getUserByGuid($guid);
-
         $this->getUserDao()->where('guid', $guid)->delete();
         $this->getLogService()->createTrace('删除:用户', $guid);
 
@@ -115,21 +106,9 @@ class UserServiceImpl extends BaseModel implements UserService
 
     public function searchByPagination($conditions, $orderBy): array
     {
-        [$offset, $limit] = $this->getOffsetAndLimit();
-
         $conditions = $this->prepareConditions($conditions);
 
-        $data = $this->search($conditions, $orderBy, $offset, $limit);
-        $count = $this->count($conditions);
-
-        return [
-            'data' => $data,
-            'paging' => [
-                'total' => $count,
-                'offset' => $offset,
-                'limit' => $limit,
-            ],
-        ];
+        return $this->getUserDao()->searchByPagination($conditions, $orderBy);
     }
 
     protected function checkName($guid, $name): bool
