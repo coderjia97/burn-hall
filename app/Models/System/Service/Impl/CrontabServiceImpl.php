@@ -7,13 +7,13 @@
 
 namespace App\Models\System\Service\Impl;
 
-use App\Models\BaseModel;
+use App\Models\BaseService;
 use App\Models\System\Service\CrontabService;
 use TiBeN\CrontabManager\CrontabAdapter;
 use TiBeN\CrontabManager\CrontabJob;
 use TiBeN\CrontabManager\CrontabRepository;
 
-class CrontabServiceImpl extends BaseModel implements CrontabService
+class CrontabServiceImpl extends BaseService implements CrontabService
 {
     public function createCrontab($time, $command, $logPath = '/dev/null', $enforce = false): bool
     {

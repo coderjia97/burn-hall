@@ -7,11 +7,11 @@
 
 namespace App\Models\Jwt\Service\Impl;
 
-use App\Models\BaseModel;
+use App\Models\BaseService;
 use App\Models\Jwt\Service\JwtService;
 use Firebase\JWT\JWT as FirebaseJWT;
 
-class JwtServiceImpl extends BaseModel implements JwtService
+class JwtServiceImpl extends BaseService implements JwtService
 {
     public function generateAssetsTokenByGuid($guid)
     {

@@ -7,10 +7,10 @@
 
 namespace App\Models\Job\Dao\Impl;
 
-use App\Models\BaseModel;
+use App\Models\BaseDao;
 use App\Models\Job\Dao\JobDao;
 
-class JobDaoImpl extends BaseModel implements JobDao
+class JobDaoImpl extends BaseDao implements JobDao
 {
     protected $guarded = [];
     protected $table = 'job';

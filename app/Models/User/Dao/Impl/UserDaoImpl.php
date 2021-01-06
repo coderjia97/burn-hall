@@ -7,11 +7,11 @@
 
 namespace App\Models\User\Dao\Impl;
 
-use App\Models\BaseModel;
+use App\Models\BaseDao;
 use App\Models\User\Dao\UserDao;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class UserDaoImpl extends BaseModel implements UserDao
+class UserDaoImpl extends BaseDao implements UserDao
 {
     use SoftDeletes;
     protected $guarded = [];

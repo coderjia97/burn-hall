@@ -11,6 +11,8 @@ use App\Models\BaseServiceInterface;
 
 interface JobService extends BaseServiceInterface
 {
+    public function get($id);
+
     public function getFirstJob();
 
     public function setNextTime($job, $isExecution = false);
@@ -18,4 +20,8 @@ interface JobService extends BaseServiceInterface
     public function refreshJob();
 
     public function getByClass($class): array;
+
+    public function updateStatus($id, $status): bool;
+
+    public function searchByPagination($conditions);
 }
