@@ -27,8 +27,7 @@ class JobController extends Controller
      */
     public function search(Request $request)
     {
-        $conditions = $request->get('conditions', '[]');
-        $conditions = json_decode($conditions, true);
+        $conditions = $request->get('conditions', []);
 
         return $this->getJobService()->searchByPagination($conditions);
     }

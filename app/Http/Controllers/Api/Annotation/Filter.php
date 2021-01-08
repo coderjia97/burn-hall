@@ -21,7 +21,7 @@ abstract class Filter
     public function filter($data)
     {
         if (!$data) {
-            return [];
+            return null;
         }
 
         foreach ([self::SIMPLE_MODE] as $mode) {
@@ -40,7 +40,7 @@ abstract class Filter
     public function filters(&$dataSet)
     {
         if (!$dataSet) {
-            return [];
+            return null;
         }
 
         if (array_key_exists('data', $dataSet) && array_key_exists('paging', $dataSet)) {
@@ -54,5 +54,10 @@ abstract class Filter
         }
 
         return $dataSet;
+    }
+
+    protected function getService($service)
+    {
+        return app('modelHelper')->getService($service);
     }
 }

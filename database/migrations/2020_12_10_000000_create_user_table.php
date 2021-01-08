@@ -23,7 +23,6 @@ class CreateUserTable extends Migration
             $table->unsignedInteger('group')->comment('所属用户组');
             $table->unsignedTinyInteger('isAdmin')->comment('是否为管理员');
             $table->unsignedTinyInteger('status')->default(1)->comment('状态: 1 开启;0 关闭');
-            $table->string('refreshToken')->default('')->comment('refreshToken');
             $table->timestamp('createTime')->nullable()->comment('创建时间');
             $table->unsignedInteger('createUserId')->nullable()->comment('创建用户');
             $table->timestamp('updateTime')->nullable()->comment('更新时间');

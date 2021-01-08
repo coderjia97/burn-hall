@@ -27,6 +27,10 @@ class Api
             $user_id = '';
         }
 
+        if (!empty($request->get('conditions'))) {
+            $request->merge(['conditions' => (array) json_decode($request->get('conditions'))]);
+        }
+
         $startTime = microtime(true);
         $response = $next($request);
 
@@ -42,7 +46,9 @@ class Api
             Log::channel('api_error_log')->error($info);
         }
 
-        $this->annotationReader($request, $response);
+        if (200 == $response->getStatusCode()) {
+            $this->annotationReader($request, $response);
+        }
 
         return $response;
     }
@@ -82,7 +88,9 @@ class Api
                 break;
         }
 
-        $response->setContent(json_encode($data));
+        if (null !== $data) {
+            $response->setContent(json_encode($data));
+        }
 
         return null;
     }
