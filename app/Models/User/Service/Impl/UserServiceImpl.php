@@ -60,7 +60,9 @@ class UserServiceImpl extends BaseService implements UserService
             throw new \InvalidArgumentException('用户不存在');
         }
 
-        return $userInfo->toArray();
+        $userData = $userInfo->toArray();
+
+        return $this->filterData($userData);
     }
 
     public function updateUser($guid, $data): bool
@@ -118,21 +120,6 @@ class UserServiceImpl extends BaseService implements UserService
         return $result;
     }
 
-    public function filterData($data): array
-    {
-        $gruopInfo = $this->getGroupService()->getAll();
-        $groupIds = ArrayTools::index($gruopInfo, 'id');
-        $data = !empty($data['data']) ? $data['data'] : $data;
-
-        foreach ($data as &$value) {
-            if (!empty($groupIds[$value['group']])) {
-                $value['group'] = $groupIds[$value['group']]['name'];
-            }
-        }
-
-        return $data;
-    }
-
     public function searchByPagination($conditions, $orderBy): array
     {
         $conditions = $this->prepareConditions($conditions);
@@ -163,6 +150,27 @@ class UserServiceImpl extends BaseService implements UserService
         }
 
         return $userInfo;
+    }
+
+    protected function filterData($data): array
+    {
+        $gruopInfo = $this->getGroupService()->getAll();
+        $groupIds = ArrayTools::index($gruopInfo, 'id');
+        $data = !empty($data['data']) ? $data['data'] : $data;
+
+        if (!empty($data['group'])) {
+            $data['groupName'] = !empty($groupIds[$data['group']]) ? $groupIds[$data['group']]['name'] : '未分组';
+
+            return $data;
+        }
+
+        foreach ($data as &$value) {
+            if (!empty($groupIds[$value['group']])) {
+                $value['groupName'] = $groupIds[$value['group']]['name'];
+            }
+        }
+
+        return $data;
     }
 
     protected function checkName($guid, $name): bool

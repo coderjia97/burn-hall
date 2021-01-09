@@ -8,18 +8,12 @@
 namespace App\Http\Controllers\Api\Admin\User\Filter;
 
 use App\Http\Controllers\Api\Annotation\Filter;
-use App\Models\User\Service\GroupService;
-use App\Toolkit\ArrayTools;
 
 class UserFilter extends Filter
 {
     protected $mode = self::SIMPLE_MODE;
 
     protected $simpleFields = [
-        'id','name','group','email','createTime','updateTime'
+        'id', 'name', 'group', 'groupName', 'email', 'createTime', 'updateTime',
     ];
-
-//    protected function simpleFields(&$data)
-//    {
-//    }
 }

@@ -19,13 +19,11 @@ interface UserService extends BaseServiceInterface
 
     public function deleteUser($guid): bool;
 
-    public function getUserjurisdiction($guid): array;
+    public function getUserJurisdiction($guid): array;
 
     public function loginUser($data): array;
 
     public function modify($guid, $type, $value): bool;
-
-    public function filterData($data): array;
 
     public function searchByPagination($conditions, $orderBy): array;
 }

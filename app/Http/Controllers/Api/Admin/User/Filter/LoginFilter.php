@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Http\Controllers\Api\Admin\User\Filter;
-
 
 use App\Http\Controllers\Api\Annotation\Filter;
 
@@ -13,10 +11,6 @@ class LoginFilter extends Filter
     protected $simpleFields = [
         'guid',
         'name',
-        'salt'
+        'salt',
     ];
-
-//    protected function simpleFields(&$data)
-//    {
-//    }
 }

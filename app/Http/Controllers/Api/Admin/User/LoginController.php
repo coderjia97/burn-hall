@@ -27,7 +27,7 @@ class LoginController extends Controller
 
     public function get($guid)
     {
-        return $this->getUserService()->getUserjurisdiction($guid);
+        return $this->getUserService()->getUserJurisdiction($guid);
     }
 
     public function update(Request $request)
