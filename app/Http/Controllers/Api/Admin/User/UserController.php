@@ -24,6 +24,9 @@ class UserController extends Controller
         return response()->json($userInfo);
     }
 
+    /**
+     * @ResponseFilter(class="\App\Http\Controllers\Api\Admin\User\Filter\UserFilter", mode="simple")
+     */
     public function search(Request $request)
     {
         $conditions = $request->all();
@@ -45,9 +48,12 @@ class UserController extends Controller
         return $this->getUserService()->updateUser($guid, $data);
     }
 
-    public function modify($guid)
+    public function modify(Request $request, $guid)
     {
-        return $this->getUserService()->modify($guid);
+        $value = $request->get('value');
+        $type = $request->get('type');
+
+        return $this->getUserService()->modify($guid, $type, !$value);
     }
 
     public function delete($guid)

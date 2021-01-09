@@ -1,23 +1,23 @@
-- - name: Index
-    title: 首页
-    status: 1
-  - name: System
-    title: 系统
-    status: 1
-    children:
-      - name: AuthGroup
-        title: 权限组管理
-        status: 1
-        children:
-          - name: AuthGroupAdd
-            title: 权限组添加
-            status: 1
-          - name: AuthGroupDel
-            title: 权限组删除
-            status: 1
-          - name: AuthGroupUpdate
-            title: 权限组修改
-            status: 1s
-          - name: AuthGroupList
-            title: 权限组列表
-            status: 1
+- name: Index
+  title: 首页
+  status: 1
+- name: System
+  title: 系统
+  status: 1
+  children:
+    - name: AuthGroup
+      title: 权限组管理
+      status: 1
+      children:
+        - name: AuthGroupAdd
+          title: 权限组添加
+          status: 1
+        - name: AuthGroupDel
+          title: 权限组删除
+          status: 1
+        - name: AuthGroupUpdate
+          title: 权限组修改
+          status: 1s
+        - name: AuthGroupList
+          title: 权限组列表
+          status: 1

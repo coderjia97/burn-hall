@@ -12,14 +12,14 @@ use App\Models\BaseValidator;
 class UserValidator extends BaseValidator
 {
     protected $rule = [
-        'id' => 'required|max:20',
+        'guid' => 'required|max:20',
         'name' => 'required|max:20',
         'password' => 'required|max:30',
         'group' => 'required',
     ];
 
     protected $message = [
-        'id.required' => '用户编号',
+        'guid.required' => '请传入用户编号',
         'name.required' => '请输入账号',
         'name.max' => '账号错误',
         'password.required' => '请输入密码',
@@ -30,5 +30,7 @@ class UserValidator extends BaseValidator
     protected $scene = [
         'create' => ['name', 'password', 'group'],
         'update' => ['name'],
+        'login' => ['name','password'],
+        'power' => ['guid'],
     ];
 }
