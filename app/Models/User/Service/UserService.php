@@ -23,7 +23,7 @@ interface UserService extends BaseServiceInterface
 
     public function loginUser($data): array;
 
-    public function modify($guid,$type,$value): bool;
+    public function modify($guid, $type, $value): bool;
 
     public function filterData($data): array;
 

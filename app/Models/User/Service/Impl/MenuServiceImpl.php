@@ -4,28 +4,25 @@ namespace App\Models\User\Service\Impl;
 
 use App\Models\BaseService;
 use App\Models\User\Service\MenuService;
-use App\Toolkit\ArrayTools;
 use Symfony\Component\Yaml\Yaml;
 
 class MenuServiceImpl extends BaseService implements MenuService
 {
     public function searchMenu()
     {
-        return Yaml::parseFile(config_path() . '/menu.yaml');
+        return Yaml::parseFile(config_path().'/menu.yaml');
     }
 
     public function getUserMenu($roleData, $menu = [])
     {
-        if(empty($menu))
-        {
+        if (empty($menu)) {
             $menu = self::searchMenu();
         }
-        if(!is_array($roleData))
-        {
-            $roleData = explode(",",$roleData);
+        if (!is_array($roleData)) {
+            $roleData = explode(',', $roleData);
         }
 
-        return self::filterMenu($menu,$roleData);
+        return self::filterMenu($menu, $roleData);
     }
 
     public function filterMenu(array &$array, array $conditions)

@@ -30,7 +30,7 @@ class UserValidator extends BaseValidator
     protected $scene = [
         'create' => ['name', 'password', 'group'],
         'update' => ['name'],
-        'login' => ['name','password'],
+        'login' => ['name', 'password'],
         'power' => ['guid'],
     ];
 }

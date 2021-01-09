@@ -8,9 +8,9 @@
 namespace App\Http\Controllers\Api\Admin\User;
 
 use App\Exceptions\Exception;
+use App\Http\Controllers\Api\Annotation\ResponseFilter;
 use App\Http\Controllers\Controller;
 use App\Models\User\Service\UserService;
-use App\Http\Controllers\Api\Annotation\ResponseFilter;
 use Illuminate\Http\Request;
 
 class LoginController extends Controller
@@ -23,13 +23,6 @@ class LoginController extends Controller
         $conditions = $request->all();
 
         return $this->getUserService()->loginUser($conditions);
-
-//        return response()->json([
-//            'message' => '获取成功',
-//            'data' => [
-//                'token' => $this->getJwtModel()->generateAssetsTokenByGuid('aaa'),
-//            ],
-//        ]);
     }
 
     public function get($guid)

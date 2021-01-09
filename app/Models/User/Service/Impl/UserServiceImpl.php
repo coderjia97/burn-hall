@@ -10,9 +10,9 @@ namespace App\Models\User\Service\Impl;
 use App\Models\BaseService;
 use App\Models\Log\Service\LogService;
 use App\Models\User\Dao\UserDao;
+use App\Models\User\Service\GroupService;
 use App\Models\User\Service\MenuService;
 use App\Models\User\Service\UserService;
-use App\Models\User\Service\GroupService;
 use App\Models\User\Validator\UserValidator;
 use App\Toolkit\ArrayTools;
 use App\Toolkit\CharTools;
@@ -40,14 +40,14 @@ class UserServiceImpl extends BaseService implements UserService
 
         $data['salt'] = CharTools::getRandChar(16);
         $data['guid'] = CharTools::generateGuid();
-        $data['password'] = Hash::make(sha1(md5($data['salt'] . config('app.salt') . $data['password']) . $data['salt']));
+        $data['password'] = Hash::make(sha1(md5($data['salt'].config('app.salt').$data['password']).$data['salt']));
         $data['isAdmin'] = self::IS_ADMIN_FALSE;
         $data['status'] = self::STATUS_TRUE;
         $data['createUserId'] = $this->getCurrentUser()->getId();
         $data['updateUserId'] = $this->getCurrentUser()->getId();
 
         $this->getUserDao()->create($data);
-        $this->getLogService()->createTrace('创建:用户' . $data['name'], $data);
+        $this->getLogService()->createTrace('创建:用户'.$data['name'], $data);
 
         return true;
     }
@@ -76,12 +76,12 @@ class UserServiceImpl extends BaseService implements UserService
 
         $data = ArrayTools::parts($data, ['name', 'email', 'password', 'salt', 'group', 'status']);
         if (!empty($data['password'])) {
-            $data['password'] = Hash::make(sha1(md5($data['salt'] . config('app.salt') . $data['password']) . $data['salt']));
+            $data['password'] = Hash::make(sha1(md5($data['salt'].config('app.salt').$data['password']).$data['salt']));
         }
         $data['updateUserId'] = $this->getCurrentUser()->getId();
 
         $this->getUserDao()->where('guid', $guid)->update($data);
-        $this->getLogService()->createTrace('修改:用户' . $guid, $data);
+        $this->getLogService()->createTrace('修改:用户'.$guid, $data);
 
         return true;
     }
@@ -98,6 +98,7 @@ class UserServiceImpl extends BaseService implements UserService
     {
         $userInfo = $this->getUserByGuid($guid);
         $groupInfo = $this->getGroupService()->get($userInfo['group']);
+
         return $this->getMenuService()->getUserMenu($groupInfo['rules']);
     }
 
@@ -107,12 +108,12 @@ class UserServiceImpl extends BaseService implements UserService
             throw new \InvalidArgumentException('xxxx');
         }
 
-        if ($type === 'status' && !in_array($value, [self::STATUS_FALSE, self::STATUS_TRUE])) {
+        if ('status' === $type && !in_array($value, [self::STATUS_FALSE, self::STATUS_TRUE])) {
             throw new \InvalidArgumentException('xxxx');
         }
 
         $result = $this->getUserDao()->where('guid', $guid)->update([$type => $value]);
-        $this->getLogService()->createTrace('修改状态:用户' . $guid, [$type => $value]);
+        $this->getLogService()->createTrace('修改状态:用户'.$guid, [$type => $value]);
 
         return $result;
     }
@@ -120,16 +121,15 @@ class UserServiceImpl extends BaseService implements UserService
     public function filterData($data): array
     {
         $gruopInfo = $this->getGroupService()->getAll();
-        $groupIds = ArrayTools::index($gruopInfo,'id');
-        $data = !empty($data['data'])?$data['data']:$data;
+        $groupIds = ArrayTools::index($gruopInfo, 'id');
+        $data = !empty($data['data']) ? $data['data'] : $data;
 
-        foreach ($data as &$value)
-        {
-            if(!empty($groupIds[$value['group']]))
-            {
+        foreach ($data as &$value) {
+            if (!empty($groupIds[$value['group']])) {
                 $value['group'] = $groupIds[$value['group']]['name'];
             }
         }
+
         return $data;
     }
 
@@ -138,6 +138,7 @@ class UserServiceImpl extends BaseService implements UserService
         $conditions = $this->prepareConditions($conditions);
 
         $userData = $this->getUserDao()->searchByPagination($conditions, $orderBy);
+
         return $this->filterData($userData);
     }
 
@@ -153,11 +154,11 @@ class UserServiceImpl extends BaseService implements UserService
             throw new \InvalidArgumentException('用户不存在');
         }
 
-        $isCheck = Hash::check(sha1(md5($userInfo['salt'] . config('app.salt') . $data['password']) . $userInfo['salt']), $userInfo['password']);
+        $isCheck = Hash::check(sha1(md5($userInfo['salt'].config('app.salt').$data['password']).$userInfo['salt']), $userInfo['password']);
         if (!$isCheck) {
             throw new \InvalidArgumentException('用户名称不存在或密码有误');
         }
-        if ($userInfo['isAdmin'] == self::IS_ADMIN_FALSE || $userInfo['status'] == self::STATUS_FALSE) {
+        if (self::IS_ADMIN_FALSE == $userInfo['isAdmin'] || self::STATUS_FALSE == $userInfo['status']) {
             throw new \InvalidArgumentException('用户被关闭或非管理员用户');
         }
 
@@ -187,7 +188,7 @@ class UserServiceImpl extends BaseService implements UserService
         $newConditions = [];
 
         if (!empty($conditions['name'])) {
-            $newConditions[] = ['name', 'like', '%' . $conditions['name'] . '%'];
+            $newConditions[] = ['name', 'like', '%'.$conditions['name'].'%'];
         }
 
         return $newConditions;
@@ -212,5 +213,4 @@ class UserServiceImpl extends BaseService implements UserService
     {
         return $this->getService('User:Group');
     }
-
 }
