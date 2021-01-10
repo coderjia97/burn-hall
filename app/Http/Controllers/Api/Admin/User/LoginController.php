@@ -8,19 +8,26 @@
 namespace App\Http\Controllers\Api\Admin\User;
 
 use App\Exceptions\Exception;
+use App\Http\Controllers\Api\Annotation\ResponseFilter;
 use App\Http\Controllers\Controller;
+use App\Models\User\Service\UserService;
 use Illuminate\Http\Request;
 
 class LoginController extends Controller
 {
-    public function create()
+    /**
+     * @ResponseFilter(class="\App\Http\Controllers\Api\Admin\User\Filter\LoginFilter", mode="simple")
+     */
+    public function create(Request $request)
     {
-        return response()->json([
-            'message' => '获取成功',
-            'data' => [
-                'token' => $this->getJwtModel()->generateAssetsTokenByGuid('aaa'),
-            ],
-        ]);
+        $conditions = $request->all();
+
+        return $this->getUserService()->loginUser($conditions);
+    }
+
+    public function get($guid)
+    {
+        return $this->getUserService()->getUserJurisdiction($guid);
     }
 
     public function update(Request $request)
@@ -45,5 +52,10 @@ class LoginController extends Controller
     private function getJwtModel(): \App\Models\Jwt\Service\JwtService
     {
         return $this->getService('Jwt:Jwt');
+    }
+
+    private function getUserService(): UserService
+    {
+        return $this->getService('User:User');
     }
 }

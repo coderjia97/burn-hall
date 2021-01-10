@@ -15,4 +15,6 @@ interface GroupService extends BaseServiceInterface
     public function deleteGroup($id): bool;
 
     public function searchByPagination($conditions, $orderBy): array;
+
+    public function getAll(): array;
 }

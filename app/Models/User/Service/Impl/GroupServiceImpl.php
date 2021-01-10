@@ -79,6 +79,11 @@ class GroupServiceImpl extends BaseService implements GroupService
         return $this->getGroupDao()->searchByPagination($conditions, $orderBy);
     }
 
+    public function getAll(): array
+    {
+        return $this->getGroupDao()->get()->toArray();
+    }
+
     protected function prepareConditions($conditions): array
     {
         $newConditions = [];
