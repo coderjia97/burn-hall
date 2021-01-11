@@ -91,11 +91,11 @@ class Job extends Command
 
     private function getJobService(): JobService
     {
-        return app('modelHelper')->getService('Job:JobService');
+        return app('modelHelper')->getService('Job:Job');
     }
 
     private function getJobLogService(): JobLogService
     {
-        return app('modelHelper')->getService('Job:JobLogService');
+        return app('modelHelper')->getService('Job:JobLog');
     }
 }

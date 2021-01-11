@@ -7,18 +7,40 @@
 
 namespace App\Http\Controllers\Api\Admin\System;
 
+use App\Http\Controllers\Api\Annotation\ResponseFilter;
 use App\Http\Controllers\Controller;
 use App\Models\Job\Service\JobService;
+use Illuminate\Http\Request;
 
 class JobController extends Controller
 {
-    public function search()
+    /**
+     * @ResponseFilter(class="\App\Http\Controllers\Api\Admin\System\Filter\JobFilter", mode="simple")
+     */
+    public function get($id)
     {
-        return $this->getJobService()->search([], [], 0, PHP_INT_MAX);
+        return $this->getJobService()->get($id);
+    }
+
+    /**
+     * @ResponseFilter(class="\App\Http\Controllers\Api\Admin\System\Filter\JobFilter", mode="simple")
+     */
+    public function search(Request $request)
+    {
+        $conditions = $request->get('conditions', []);
+
+        return $this->getJobService()->searchByPagination($conditions);
+    }
+
+    public function modify(Request $request, $id)
+    {
+        $status = $request->get('status');
+
+        return $this->getJobService()->updateStatus($id, !$status);
     }
 
     private function getJobService(): JobService
     {
-        return $this->getService('Job:JobService');
+        return $this->getService('Job:Job');
     }
 }

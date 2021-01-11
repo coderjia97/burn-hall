@@ -2,11 +2,8 @@
 
 namespace App\Models\User\Dao;
 
-use App\Models\BaseModel;
+use App\Models\BaseDaoInterface;
 
-class GroupDao extends BaseModel
+interface GroupDao extends BaseDaoInterface
 {
-    protected $table = 'user_group';
-
-    protected $fillable = ['name', 'rules'];
 }

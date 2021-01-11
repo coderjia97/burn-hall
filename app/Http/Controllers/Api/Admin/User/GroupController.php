@@ -10,7 +10,7 @@ class GroupController extends Controller
 {
     public function get($id)
     {
-        $groupInfo = $this->getGroupService()->getGroup($id);
+        $groupInfo = $this->getGroupService()->get($id);
 
         return response()->json($groupInfo);
     }
@@ -43,6 +43,6 @@ class GroupController extends Controller
 
     private function getGroupService(): GroupService
     {
-        return $this->getService('User:GroupService');
+        return $this->getService('User:Group');
     }
 }

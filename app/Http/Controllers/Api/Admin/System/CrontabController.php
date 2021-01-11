@@ -43,11 +43,11 @@ class CrontabController extends Controller
 
     private function getCrontabService(): CrontabService
     {
-        return $this->getService('System:CrontabService');
+        return $this->getService('System:Crontab');
     }
 
     private function getJobService(): JobService
     {
-        return $this->getService('Job:JobService');
+        return $this->getService('Job:Job');
     }
 }

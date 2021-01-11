@@ -10,34 +10,59 @@ namespace App\Models;
 use App\Models\User\Provider\CurrentUserProvider;
 use Illuminate\Database\Eloquent\Model;
 
-class BaseModel extends Model
+class BaseDao extends Model implements BaseDaoInterface
 {
     public const CREATED_AT = 'createTime';
     public const UPDATED_AT = 'updateTime';
     public const DELETED_AT = 'deleteTime';
-    public $dao;
 
     public function getById($id)
     {
-        $result = $this->dao->where(['id' => $id])->first();
+        $result = $this->where(['id' => $id])->first();
 
         return empty($result) ? [] : $result->toArray();
     }
 
-    public function search($conditions, $orders, $offset, $limit, $select = '*')
+    public function search($conditions, $orderBy, $offset, $limit, $select = '*')
     {
-        $builder = $this->dao->where($conditions);
+        $builder = $this->where($conditions);
 
-        foreach ($orders as $key => $order) {
+        foreach ($orderBy as $key => $order) {
             $builder = $builder->orderBy($key, $order);
         }
 
         return $builder->skip($offset)->take($limit)->select($select)->get()->toArray();
     }
 
+    public function buildOrderBy($orm, $orderBy)
+    {
+        foreach ($orderBy as $key => $order) {
+            $orm = $orm->orderBy($key, $order);
+        }
+
+        return $orm;
+    }
+
     public function count($conditions)
     {
-        return $this->dao->where($conditions)->count();
+        return $this->where($conditions)->count();
+    }
+
+    public function searchByPagination($conditions, $orderBy = ['createTime' => 'desc']): array
+    {
+        [$offset, $limit] = $this->getOffsetAndLimit();
+
+        $data = $this->search($conditions, $orderBy, $offset, $limit);
+        $count = $this->count($conditions);
+
+        return [
+            'data' => $data,
+            'paging' => [
+                'total' => $count,
+                'offset' => $offset,
+                'limit' => $limit,
+            ],
+        ];
     }
 
     protected function getOffsetAndLimit(): array

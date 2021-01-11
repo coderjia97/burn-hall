@@ -27,6 +27,10 @@ class Api
             $user_id = '';
         }
 
+        if (!empty($request->get('conditions'))) {
+            $request->merge(['conditions' => (array) json_decode($request->get('conditions'))]);
+        }
+
         $startTime = microtime(true);
         $response = $next($request);
 
@@ -42,7 +46,9 @@ class Api
             Log::channel('api_error_log')->error($info);
         }
 
-        $this->annotationReader($request, $response);
+        if (200 == $response->getStatusCode()) {
+            $this->annotationReader($request, $response);
+        }
 
         return $response;
     }
@@ -56,16 +62,16 @@ class Api
         foreach ($reader->getMethodAnnotations($method) as $annotation) {
             switch (get_class($annotation)) {
                 case ResponseFilter::class:
-                    return $this->responseFilter($annotation, $response);
+                    return $this->responseFilter($annotation, $response, $request);
                 default:
                     return null;
             }
         }
     }
 
-    private function responseFilter($annotation, $response)
+    private function responseFilter($annotation, $response, $request)
     {
-        $content = $response->getContent();
+        $content = json_decode($response->getContent(), true);
         $class = $annotation->getClass();
         $fieldFilter = new $class();
         $mode = $annotation->getMode();
@@ -73,7 +79,18 @@ class Api
             $fieldFilter->setMode($mode);
         }
 
-        $response->setContent($fieldFilter->filter($content));
+        switch ($request->route()->getActionMethod()) {
+            case 'get':
+                $data = $fieldFilter->filter($content);
+                break;
+            case 'search':
+                $data = $fieldFilter->filters($content);
+                break;
+        }
+
+        if (null !== $data) {
+            $response->setContent(json_encode($data));
+        }
 
         return null;
     }

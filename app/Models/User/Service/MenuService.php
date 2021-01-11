@@ -2,13 +2,13 @@
 
 namespace App\Models\User\Service;
 
-use App\Models\BaseModel;
-use Symfony\Component\Yaml\Yaml;
+use App\Models\BaseServiceInterface;
 
-class MenuService extends BaseModel
+interface MenuService extends BaseServiceInterface
 {
-    public function listMenu()
-    {
-        return Yaml::parseFile(config_path().'/menu.yaml');
-    }
+    public function searchMenu();
+
+    public function getUserMenu($roleData, $menu = []);
+
+    public function filterMenu(array &$array, array $conditions);
 }

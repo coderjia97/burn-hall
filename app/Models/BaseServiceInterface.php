@@ -5,10 +5,9 @@
  * Author: Ogg <baoziyoo@gmail.com>
  */
 
-namespace App\Models\Job\Dao;
+namespace App\Models;
 
-use App\Models\BaseDaoInterface;
-
-interface JobDao extends BaseDaoInterface
+interface BaseServiceInterface
 {
+    public function buildOrderBy($orm, $orderBy);
 }

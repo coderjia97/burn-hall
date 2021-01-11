@@ -7,12 +7,8 @@
 
 namespace App\Models\User\Dao;
 
-use App\Models\BaseModel;
-use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\BaseDaoInterface;
 
-class UserDao extends BaseModel
+interface UserDao extends BaseDaoInterface
 {
-    use SoftDeletes;
-    protected $guarded = [];
-    protected $table = 'user';
 }

@@ -5,15 +5,15 @@
  * Author: Ogg <baoziyoo@gmail.com>
  */
 
-namespace App\Http\Controllers\Api\Admin\User\Filter;
+namespace App\Http\Controllers\Api\Admin\System\Filter;
 
 use App\Http\Controllers\Api\Annotation\Filter;
 
-class UserFilter extends Filter
+class JobFilter extends Filter
 {
     protected $mode = self::SIMPLE_MODE;
 
     protected $simpleFields = [
-        'id', 'name', 'group', 'groupName', 'email', 'createTime', 'updateTime',
+        'id', 'args', 'class', 'expression', 'lastExecutionTime', 'name', 'nextExecutionTime', 'status',
     ];
 }

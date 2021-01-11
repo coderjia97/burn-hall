@@ -7,45 +7,13 @@
 
 namespace App\Models\System\Service;
 
-use App\Models\BaseModel;
-use TiBeN\CrontabManager\CrontabAdapter;
-use TiBeN\CrontabManager\CrontabJob;
-use TiBeN\CrontabManager\CrontabRepository;
+use App\Models\BaseServiceInterface;
 
-class CrontabService extends BaseModel
+interface CrontabService extends BaseServiceInterface
 {
-    public function createCrontab($time, $command, $logPath = '/dev/null', $enforce = false): bool
-    {
-        $this->deleteCrontab($command);
+    public function createCrontab($time, $command, $logPath = '/dev/null', $enforce = false): bool;
 
-        if (empty($this->findCrontab($command)) || $enforce) {
-            $crontabRepository = new CrontabRepository(new CrontabAdapter());
-            $crontabJob = CrontabJob::createFromCrontabLine($time.' '.$command.' >> '.$logPath.' 2>&1');
-            $crontabJob->comments = 'BurnHall scheduler Job '.uniqid('', true);
-            $crontabRepository->addJob($crontabJob);
-            $crontabRepository->persist();
-        }
+    public function deleteCrontab($name): bool;
 
-        return true;
-    }
-
-    public function deleteCrontab($name): bool
-    {
-        $crontabRepository = new CrontabRepository(new CrontabAdapter());
-        $crontabJobs = $crontabRepository->findJobByRegex('/'.str_replace('/', '\/', $name).'/');
-
-        foreach ($crontabJobs as $crontabJob) {
-            $crontabRepository->removeJob($crontabJob);
-            $crontabRepository->persist();
-        }
-
-        return true;
-    }
-
-    public function findCrontab($name)
-    {
-        $crontabRepository = new CrontabRepository(new CrontabAdapter());
-
-        return $crontabRepository->findJobByRegex('/'.str_replace('/', '\/', $name).'/');
-    }
+    public function findCrontab($name);
 }
