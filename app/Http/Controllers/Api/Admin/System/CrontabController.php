@@ -14,6 +14,16 @@ use Illuminate\Http\Request;
 
 class CrontabController extends Controller
 {
+    /**
+     * @OA\Info(title="My First API", version="0.1")
+     */
+
+    /**
+     * @OA\Get(
+     *     path="/api/resource.json",
+     *     @OA\Response(response="200", description="An example resource")
+     * )
+     */
     public function search()
     {
         $initConfig = $this->getInitCrontab();
@@ -36,8 +46,8 @@ class CrontabController extends Controller
     {
         return [
             'time' => '* * * * *',
-            'command' => 'php '.base_path().'/artisan schedule:run',
-            'logPath' => base_path().'/storage/logs/job/crontab.log',
+            'command' => 'php ' . base_path() . '/artisan schedule:run',
+            'logPath' => base_path() . '/storage/logs/job/crontab.log',
         ];
     }
 
