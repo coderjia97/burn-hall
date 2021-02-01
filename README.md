@@ -13,3 +13,9 @@ BurnHall2 是基于laravel7 和 Ant Design 开发的一套前后端分离的后�
 -[ ] 微信封装  
 -[x] 日志封装  
 -[x] 注释过滤`Api`返回参数  
+
+
+#Composer
+1. `barryvdh/laravel-ide-helper` 支持`idea`提示
+2. `binarytorch/larecipe` `Markdown`[文档支持](https://larecipe.binarytorch.com.my/)
+
