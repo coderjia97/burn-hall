@@ -13,28 +13,35 @@ use Firebase\JWT\JWT as FirebaseJWT;
 
 class JwtServiceImpl extends BaseService implements JwtService
 {
-    public function generateAssetsTokenByGuid($guid)
+    public function generateAssetsTokenByGuid($guid, $source = '')
     {
         if ('' == $guid) {
             return false;
         }
 
-        return FirebaseJWT::encode($this->generateDefaultConfigByGuid($guid), config('jwt.secretKey'));
+        return FirebaseJWT::encode($this->generateDefaultConfigByGuid([
+            'guid' => $guid,
+            'source' => $source,
+        ]), config('jwt.secretKey'));
+    }
+
+    public function generateToken($config)
+    {
+        return FirebaseJWT::encode($config, config('jwt.secretKey'));
     }
 
     public function decode($assetsToken): array
     {
-        return (array) FirebaseJWT::decode($assetsToken, config('jwt.secretKey'), ['HS256']);
+        return (array)FirebaseJWT::decode($assetsToken, config('jwt.secretKey'), ['HS256']);
     }
 
-    protected function generateDefaultConfigByGuid($guid): array
+    protected function generateDefaultConfigByGuid($config): array
     {
-        return [
+        return array_merge([
             'iss' => config('jwt.iss'),
             'iat' => time(),
             'exp' => time() + config('jwt.exp'),
             'signature' => config('jwt.signature'),
-            'guid' => $guid,
-        ];
+        ], $config);
     }
 }

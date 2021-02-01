@@ -14,16 +14,19 @@ use Illuminate\Http\Request;
 class Auth
 {
     public $whitelist = [
-        '/^\/api\/user\/login/',
+        '/^\/api\/admin\/user\/login/',
+        '/\/api\/admin\/system\/verification_code/',
     ];
 
     public function handle(Request $request, Closure $next)
     {
         if ($this->checkWhitelists($request->getRequestUri())) {
-            foreach (config('apiFirewall') as $firewall) {
-                if ((new $firewall())->handle($request)) {
-                    return $next($request);
-                }
+            return $next($request);
+        }
+
+        foreach (config('apiFirewall') as $firewall) {
+            if ((new $firewall())->handle($request)) {
+                return $next($request);
             }
         }
 
@@ -34,10 +37,10 @@ class Auth
     {
         foreach ($this->whitelist as $whitelist) {
             if (preg_match($whitelist, $url)) {
-                return false;
+                return true;
             }
         }
 
-        return true;
+        return false;
     }
 }

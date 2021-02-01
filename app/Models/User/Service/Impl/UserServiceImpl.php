@@ -8,10 +8,12 @@
 namespace App\Models\User\Service\Impl;
 
 use App\Models\BaseService;
+use App\Models\Jwt\Service\JwtService;
 use App\Models\Log\Service\LogService;
 use App\Models\User\Dao\UserDao;
 use App\Models\User\Service\GroupService;
 use App\Models\User\Service\MenuService;
+use App\Models\User\Service\RefreshTokenService;
 use App\Models\User\Service\UserService;
 use App\Models\User\Validator\UserValidator;
 use App\Toolkit\ArrayTools;
@@ -28,6 +30,19 @@ class UserServiceImpl extends BaseService implements UserService
     public const STATUS_TRUE = 1;
     public const STATUS_FALSE = 0;
 
+    public function get($id)
+    {
+        $userInfo = $this->getUserDao()->where(['id' => $id])->first();
+
+        if (empty($userInfo)) {
+            throw new \InvalidArgumentException('用户不存在');
+        }
+
+        $userData = $userInfo->toArray();
+
+        return $this->filterData($userData);
+    }
+
     public function createUser($data): bool
     {
         $validator = new UserValidator();
@@ -40,14 +55,14 @@ class UserServiceImpl extends BaseService implements UserService
 
         $data['salt'] = CharTools::getRandChar(16);
         $data['guid'] = CharTools::generateGuid();
-        $data['password'] = Hash::make(sha1(md5($data['salt'].config('app.salt').$data['password']).$data['salt']));
+        $data['password'] = Hash::make(sha1(md5($data['salt'] . config('app.salt') . $data['password']) . $data['salt']));
         $data['isAdmin'] = self::IS_ADMIN_FALSE;
         $data['status'] = self::STATUS_TRUE;
         $data['createUserId'] = $this->getCurrentUser()->getId();
         $data['updateUserId'] = $this->getCurrentUser()->getId();
 
         $this->getUserDao()->create($data);
-        $this->getLogService()->createTrace('创建:用户'.$data['name'], $data);
+        $this->getLogService()->createTrace('创建:用户' . $data['name'], $data);
 
         return true;
     }
@@ -78,12 +93,12 @@ class UserServiceImpl extends BaseService implements UserService
 
         $data = ArrayTools::parts($data, ['name', 'email', 'password', 'salt', 'group', 'status']);
         if (!empty($data['password'])) {
-            $data['password'] = Hash::make(sha1(md5($data['salt'].config('app.salt').$data['password']).$data['salt']));
+            $data['password'] = Hash::make(sha1(md5($data['salt'] . config('app.salt') . $data['password']) . $data['salt']));
         }
         $data['updateUserId'] = $this->getCurrentUser()->getId();
 
         $this->getUserDao()->where('guid', $guid)->update($data);
-        $this->getLogService()->createTrace('修改:用户'.$guid, $data);
+        $this->getLogService()->createTrace('修改:用户' . $guid, $data);
 
         return true;
     }
@@ -96,7 +111,7 @@ class UserServiceImpl extends BaseService implements UserService
         return true;
     }
 
-    public function getUserjurisdiction($guid): array
+    public function getUserJurisdiction($guid): array
     {
         $userInfo = $this->getUserByGuid($guid);
         $groupInfo = $this->getGroupService()->get($userInfo['group']);
@@ -115,7 +130,7 @@ class UserServiceImpl extends BaseService implements UserService
         }
 
         $result = $this->getUserDao()->where('guid', $guid)->update([$type => $value]);
-        $this->getLogService()->createTrace('修改状态:用户'.$guid, [$type => $value]);
+        $this->getLogService()->createTrace('修改状态:用户' . $guid, [$type => $value]);
 
         return $result;
     }
@@ -124,9 +139,12 @@ class UserServiceImpl extends BaseService implements UserService
     {
         $conditions = $this->prepareConditions($conditions);
 
-        $userData = $this->getUserDao()->searchByPagination($conditions, $orderBy);
+        $users = $this->getUserDao()->searchByPagination($conditions, $orderBy);
+        foreach ($users['data'] as &$user) {
+            $user = $this->filterData($user);
+        }
 
-        return $this->filterData($userData);
+        return $users;
     }
 
     public function loginUser($data): array
@@ -136,39 +154,41 @@ class UserServiceImpl extends BaseService implements UserService
             throw new \InvalidArgumentException($validator->getError());
         }
 
+        if (!captcha_api_check($data['verificationCode'], $data['verificationKey'], 'flat')) {
+            throw new \InvalidArgumentException('验证码错误');
+        }
+
         $userInfo = $this->getByName($data['name']);
         if (empty($userInfo)) {
             throw new \InvalidArgumentException('用户不存在');
         }
 
-        $isCheck = Hash::check(sha1(md5($userInfo['salt'].config('app.salt').$data['password']).$userInfo['salt']), $userInfo['password']);
+        $isCheck = Hash::check(sha1(md5($userInfo['salt'] . config('app.salt') . $data['password']) . $userInfo['salt']), $userInfo['password']);
         if (!$isCheck) {
-            throw new \InvalidArgumentException('用户名称不存在或密码有误');
+//            throw new \InvalidArgumentException('用户名称不存在或密码有误');
         }
         if (self::IS_ADMIN_FALSE == $userInfo['isAdmin'] || self::STATUS_FALSE == $userInfo['status']) {
             throw new \InvalidArgumentException('用户被关闭或非管理员用户');
         }
 
-        return $userInfo;
+        $token = $this->getJwtService()->generateAssetsTokenByGuid($userInfo['guid'], $data['source']);
+        $refreshToken = $this->getRefreshTokenService()->generateToken($userInfo['id']);
+        $menus = $this->getUserJurisdiction($userInfo['guid']);
+
+        return array_merge($userInfo, [
+            'refreshToken' => $refreshToken['token'],
+            'token' => $token,
+            'menus' => $menus,
+            'name' => $userInfo['name'],
+        ],);
     }
 
     protected function filterData($data): array
     {
-        $gruopInfo = $this->getGroupService()->getAll();
-        $groupIds = ArrayTools::index($gruopInfo, 'id');
-        $data = !empty($data['data']) ? $data['data'] : $data;
+        $groups = $this->getGroupService()->getAll();
+        $groups = ArrayTools::index($groups, 'id');
 
-        if (!empty($data['group'])) {
-            $data['groupName'] = !empty($groupIds[$data['group']]) ? $groupIds[$data['group']]['name'] : '未分组';
-
-            return $data;
-        }
-
-        foreach ($data as &$value) {
-            if (!empty($groupIds[$value['group']])) {
-                $value['groupName'] = $groupIds[$value['group']]['name'];
-            }
-        }
+        $data['groupName'] = isset($groups[$data['group']]) ? $groups[$data['group']]['name'] : '未分组';
 
         return $data;
     }
@@ -196,7 +216,7 @@ class UserServiceImpl extends BaseService implements UserService
         $newConditions = [];
 
         if (!empty($conditions['name'])) {
-            $newConditions[] = ['name', 'like', '%'.$conditions['name'].'%'];
+            $newConditions[] = ['name', 'like', '%' . $conditions['name'] . '%'];
         }
 
         return $newConditions;
@@ -220,5 +240,15 @@ class UserServiceImpl extends BaseService implements UserService
     private function getGroupService(): GroupService
     {
         return $this->getService('User:Group');
+    }
+
+    private function getRefreshTokenService(): RefreshTokenService
+    {
+        return $this->getService('User:RefreshToken');
+    }
+
+    private function getJwtService(): JwtService
+    {
+        return $this->getService('Jwt:Jwt');
     }
 }

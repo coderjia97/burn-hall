@@ -36,7 +36,7 @@ class GroupServiceImpl extends BaseService implements GroupService
         $data['updateUserId'] = $this->getCurrentUser()->getId();
 
         $this->getGroupDao()->create($data);
-        $this->getLogService()->createTrace('创建:用户组'.$data['name'], $data);
+        $this->getLogService()->createTrace('创建:用户组 name:' . $data['name'], $data);
 
         return true;
     }
@@ -55,11 +55,11 @@ class GroupServiceImpl extends BaseService implements GroupService
 
         $this->checkName($id, $data['name']);
 
-        $data = ArrayTools::parts($data, ['name', 'rules']);
+        $data = ArrayTools::parts($data, ['name', 'rules', 'status']);
         $data['updateUserId'] = $this->getCurrentUser()->getId();
 
         $this->getGroupDao()->where('id', $id)->update($data);
-        $this->getLogService()->createTrace('修改:用户组'.$id, $data);
+        $this->getLogService()->createTrace('修改:用户组 id:' . $id, $data);
 
         return true;
     }
@@ -67,7 +67,7 @@ class GroupServiceImpl extends BaseService implements GroupService
     public function deleteGroup($id): bool
     {
         $this->getGroupDao()->where('id', $id)->delete();
-        $this->getLogService()->createTrace('删除:用户组', $id);
+        $this->getLogService()->createTrace('删除:用户组 id:', $id);
 
         return true;
     }
@@ -90,7 +90,7 @@ class GroupServiceImpl extends BaseService implements GroupService
         $conditions = ArrayTools::removeNull($conditions);
 
         if (!empty($conditions['name'])) {
-            $newConditions[] = ['name', 'like', '%'.$conditions['name'].'%'];
+            $newConditions[] = ['name', 'like', '%' . $conditions['name'] . '%'];
         }
 
         return $newConditions;
@@ -109,7 +109,9 @@ class GroupServiceImpl extends BaseService implements GroupService
 
     protected function getByName($name)
     {
-        return $this->getGroupDao()->where(['name' => $name])->first()->toArray();
+        $result = $this->getGroupDao()->where(['name' => $name])->first();
+
+        return !$result ? [] : $result->toArray();
     }
 
     private function getGroupDao(): GroupDao

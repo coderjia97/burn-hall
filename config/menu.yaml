@@ -1,23 +1,43 @@
-- name: Index
-  title: 首页
-  status: 1
-- name: System
-  title: 系统
-  status: 1
+- name: 'Index'
+  title: '首页'
+  disabled: false
+  icon: 'compass'
+  url: '/'
+- name: 'User'
+  title: '用户管理'
+  disabled: false
+  icon: 'user'
   children:
-    - name: AuthGroup
-      title: 权限组管理
-      status: 1
+    - name: 'User'
+      title: '用户管理'
+      disabled: false
+      icon: 'user'
+      url: '/user'
+    - name: 'UserGroup'
+      title: '用户组管理'
+      disabled: false
+      icon: 'user'
+      url: '/user/group'
+- name: 'System'
+  title: '系统'
+  disabled: false
+  icon: 'setting'
+  children:
+    - name: 'Job'
+      title: 定时任务管理
+      disabled: false
+      url: '/system/job'
+      icon: 'user'
       children:
         - name: AuthGroupAdd
           title: 权限组添加
-          status: 1
+          disabled: false
         - name: AuthGroupDel
           title: 权限组删除
-          status: 1
+          disabled: false
         - name: AuthGroupUpdate
           title: 权限组修改
-          status: 1s
+          disabled: true
         - name: AuthGroupList
           title: 权限组列表
-          status: 1
+          disabled: true

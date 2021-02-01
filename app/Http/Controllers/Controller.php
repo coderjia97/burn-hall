@@ -7,6 +7,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User\Provider\CurrentUserProvider;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -21,5 +22,10 @@ class Controller extends BaseController
     protected function getService($service)
     {
         return app('modelHelper')->getService($service);
+    }
+
+    protected function getCurrentUser(): CurrentUserProvider
+    {
+        return app('user');
     }
 }

@@ -11,6 +11,8 @@ use App\Models\BaseServiceInterface;
 
 interface UserService extends BaseServiceInterface
 {
+    public function get($id);
+
     public function createUser($data): bool;
 
     public function getUserByGuid($guid): array;

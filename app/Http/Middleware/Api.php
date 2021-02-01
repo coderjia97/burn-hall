@@ -22,11 +22,6 @@ class Api
      */
     public function handle(Request $request, Closure $next)
     {
-        if (!empty($request->header('TOKEN'))) {
-            //得到userid
-            $user_id = '';
-        }
-
         if (!empty($request->get('conditions'))) {
             $request->merge(['conditions' => (array) json_decode($request->get('conditions'))]);
         }
@@ -86,6 +81,8 @@ class Api
             case 'search':
                 $data = $fieldFilter->filters($content);
                 break;
+            default:
+                $data = $fieldFilter->filter($content);
         }
 
         if (null !== $data) {

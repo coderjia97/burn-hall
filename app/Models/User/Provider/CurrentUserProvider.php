@@ -47,6 +47,11 @@ class CurrentUserProvider
         return $this->id;
     }
 
+    public function getGuid()
+    {
+        return $this->guid;
+    }
+
     public function getForm()
     {
         return $this->form;
