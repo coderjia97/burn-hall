@@ -45,7 +45,7 @@ class LogServiceImpl extends BaseService implements LogService
             'level' => $level,
         ];
 
-        $logCount = $this->count([]);
+        $logCount = $this->getLogDao()->count([]);
         $data['id'] = $logCount + 1;
 
         return $this->getLogDao()->create($data);

@@ -8,6 +8,7 @@
 namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Http\JsonResponse;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -23,6 +24,12 @@ class Handler extends ExceptionHandler
             return response()->json(['message' => $exception->getMessage()], $exception->getCode() <= 0 ? 500 : $exception->getCode());
         }
 
+        return new JsonResponse(
+            $this->convertExceptionToArray($exception),
+            $exception->getCode() <= 0 ? 500 : $exception->getCode(),
+            [],
+            JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES
+        );
         return parent::render($request, $exception);
     }
 }

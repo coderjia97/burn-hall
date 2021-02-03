@@ -10,4 +10,8 @@ class GroupDaoImpl extends BaseDao implements GroupDao
     protected $table = 'user_group';
 
     protected $fillable = ['name', 'rules'];
+
+    protected $casts = [
+        'rules' => 'json',
+    ];
 }

@@ -10,6 +10,8 @@ namespace App\Http\Controllers\Api\Admin\User;
 use App\Exceptions\Exception;
 use App\Http\Controllers\Api\Annotation\ResponseFilter;
 use App\Http\Controllers\Controller;
+use App\Models\Jwt\Service\JwtService;
+use App\Models\User\Service\RefreshTokenService;
 use App\Models\User\Service\UserService;
 use Illuminate\Http\Request;
 
@@ -32,24 +34,18 @@ class LoginController extends Controller
 
     public function update(Request $request)
     {
-        $token = $request->get('token', '');
-        if ('' === $token) {
-            throw new Exception('403token丢失');
-        }
+        $token = $request->post('token', '');
 
-        try {
-            $jwt = $this->getJwtModel()->decode($token);
-        } catch (\Exception $e) {
-            throw new Exception('403token过期或无效');
+        $token = $this->getRefreshTokenModel()->getToken($token);
+        if (empty($token)) {
+            throw new Exception('500登陆信息过期');
         }
+        $user = $this->getUserService()->get($token['userId']);
 
-        return response()->json([
-            'message' => '获取成功',
-            'data' => $this->getJwtModel()->generateAssetsTokenByGuid($jwt['guid']),
-        ]);
+        return ['token' => $this->getJwtModel()->generateAssetsTokenByGuid($user['guid'])];
     }
 
-    private function getJwtModel(): \App\Models\Jwt\Service\JwtService
+    private function getJwtModel(): JwtService
     {
         return $this->getService('Jwt:Jwt');
     }
@@ -57,5 +53,10 @@ class LoginController extends Controller
     private function getUserService(): UserService
     {
         return $this->getService('User:User');
+    }
+
+    private function getRefreshTokenModel(): RefreshTokenService
+    {
+        return $this->getService('User:RefreshToken');
     }
 }

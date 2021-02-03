@@ -11,7 +11,7 @@ use App\Models\BaseServiceInterface;
 
 interface JwtService extends BaseServiceInterface
 {
-    public function generateAssetsTokenByGuid($guid);
+    public function generateAssetsTokenByGuid($guid, $source = '');
 
     public function decode($assetsToken): array;
 }

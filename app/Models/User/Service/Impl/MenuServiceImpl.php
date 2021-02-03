@@ -10,19 +10,19 @@ class MenuServiceImpl extends BaseService implements MenuService
 {
     public function searchMenu()
     {
-        return Yaml::parseFile(config_path().'/menu.yaml');
+        return Yaml::parseFile(config_path() . '/menu.yaml');
     }
 
     public function getUserMenu($roleData, $menu = [])
     {
         if (empty($menu)) {
-            $menu = self::searchMenu();
+            $menu = $this->searchMenu();
         }
         if (!is_array($roleData)) {
             $roleData = explode(',', $roleData);
         }
 
-        return self::filterMenu($menu, $roleData);
+        return $this->filterMenu($menu, $roleData);
     }
 
     public function filterMenu(array &$array, array $conditions)
@@ -30,13 +30,13 @@ class MenuServiceImpl extends BaseService implements MenuService
         foreach ($array as $key => &$value) {
             if (in_array($value['name'], $conditions)) {
                 if (!empty($value['children'])) {
-                    $data[] = self::filterMenu($value['children'], $conditions);
+                    $data[] = $this->filterMenu($value['children'], $conditions);
                 }
             } else {
                 unset($array[$key]);
             }
         }
 
-        return $array;
+        return array_values($array);
     }
 }

@@ -7,6 +7,7 @@
 
 namespace App\Http\Extend\ApiFirewall;
 
+use App\Models\User\Service\UserService;
 use Illuminate\Http\Request;
 
 class Jwt implements Firewall
@@ -31,11 +32,12 @@ class Jwt implements Firewall
             return false;
         }
 
-        // todo 完善登录用户信息
-        resolve('user')->setUser([
-            'id' => '111',
-            'form' => 'jwt',
-        ]);
+        $user = $this->getUserModel()->getUserByGuid($jwt['guid']);
+        $menu = $this->getUserModel()->getUserJurisdiction($jwt['guid']);
+        resolve('user')->setUser(array_merge($user, [
+            'source' => $jwt['source'],
+            'menu' => $menu,
+        ]));
 
         return true;
     }
@@ -43,5 +45,10 @@ class Jwt implements Firewall
     private function getJwtModel(): \App\Models\Jwt\Service\JwtService
     {
         return app('modelHelper')->getService('Jwt:Jwt');
+    }
+
+    private function getUserModel(): UserService
+    {
+        return app('modelHelper')->getService('User:User');
     }
 }

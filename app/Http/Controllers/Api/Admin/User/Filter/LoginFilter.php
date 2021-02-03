@@ -11,6 +11,8 @@ class LoginFilter extends Filter
     protected $simpleFields = [
         'guid',
         'name',
-        'salt',
+        'token',
+        'menus',
+        'refreshToken',
     ];
 }

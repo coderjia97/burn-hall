@@ -7,5 +7,4 @@
 
 return [
     \App\Http\Extend\ApiFirewall\Jwt::class,
-    \App\Http\Extend\ApiFirewall\Test::class,
 ];

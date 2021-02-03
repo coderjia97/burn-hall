@@ -16,6 +16,7 @@ class UserValidator extends BaseValidator
         'name' => 'required|max:20',
         'password' => 'required|max:30',
         'group' => 'required',
+        'source' => 'required',
     ];
 
     protected $message = [
@@ -25,12 +26,13 @@ class UserValidator extends BaseValidator
         'password.required' => '请输入密码',
         'password.max' => '密码错误',
         'group.required' => '请选择用户组',
+        'source.required' => '来源为空',
     ];
 
     protected $scene = [
         'create' => ['name', 'password', 'group'],
         'update' => ['name'],
-        'login' => ['name', 'password'],
+        'login' => ['name', 'password', 'source'],
         'power' => ['guid'],
     ];
 }

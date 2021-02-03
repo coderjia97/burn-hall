@@ -14,6 +14,6 @@ class UserFilter extends Filter
     protected $mode = self::SIMPLE_MODE;
 
     protected $simpleFields = [
-        'id', 'name', 'group', 'groupName', 'email', 'createTime', 'updateTime',
+        'id', 'name', 'groupName', 'email', 'createTime', 'updateTime', 'status',
     ];
 }
