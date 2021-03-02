@@ -70,7 +70,7 @@ class BaseDao extends Model implements BaseDaoInterface
         $offset = request('offset', config('pagination.defaultPagingOffset'));
         $limit = request('limit', config('pagination.defaultPagingLimit'));
 
-        return [(int)$offset, (int)$limit];
+        return [(int) $offset, (int) $limit];
     }
 
     protected function getService($service, $version = '')

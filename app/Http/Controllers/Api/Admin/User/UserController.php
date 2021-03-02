@@ -15,7 +15,7 @@ use Illuminate\Http\Request;
 class UserController extends Controller
 {
     /**
-     * @ResponseFilter(class="\App\Http\Controllers\Api\Admin\User\Filter\UserFilter", mode="simple")
+     * @ResponseFilter(class=\App\Http\Controllers\Api\Admin\User\Filter\UserFilter::class, mode="simple")
      */
     public function get($guid)
     {
@@ -25,7 +25,7 @@ class UserController extends Controller
     }
 
     /**
-     * @ResponseFilter(class="\App\Http\Controllers\Api\Admin\User\Filter\UserFilter", mode="simple")
+     * @ResponseFilter(class=\App\Http\Controllers\Api\Admin\User\Filter\UserFilter::class, mode="simple")
      */
     public function search(Request $request)
     {

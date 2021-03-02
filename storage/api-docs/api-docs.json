@@ -1,18 +1,795 @@
 {
     "openapi": "3.0.0",
     "info": {
-        "title": "My First API",
-        "version": "0.1"
+        "title": "whell-laravel-api-documentation",
+        "version": "v1.0.0"
     },
     "paths": {
-        "/api/resource.json": {
+        "/api/admin/system/crontab": {
             "get": {
+                "tags": [
+                    "定时任务脚本"
+                ],
+                "summary": "查询所有定时任务脚本",
+                "description": "查询所有定时任务脚本",
                 "operationId": "App\\Http\\Controllers\\Api\\Admin\\System\\CrontabController::search",
+                "parameters": [
+                    {
+                        "name": "accept",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/components/schemas/accept"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
-                        "description": "An example resource"
+                        "description": "返回结果",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "0": {
+                                            "properties": {
+                                                "enabled": {
+                                                    "description": "开启状态",
+                                                    "type": "bool",
+                                                    "example": true
+                                                },
+                                                "minutes": {
+                                                    "description": "分钟",
+                                                    "type": "string",
+                                                    "example": "*"
+                                                },
+                                                "hours": {
+                                                    "description": "小时",
+                                                    "type": "string",
+                                                    "example": "*"
+                                                },
+                                                "dayOfMonth": {
+                                                    "description": "日期",
+                                                    "type": "string",
+                                                    "example": "*"
+                                                },
+                                                "months": {
+                                                    "description": "月份",
+                                                    "type": "string",
+                                                    "example": "*"
+                                                },
+                                                "dayOfWeek": {
+                                                    "description": "星期几",
+                                                    "type": "string",
+                                                    "example": "*"
+                                                },
+                                                "taskCommandLine": {
+                                                    "description": "任务执行命令",
+                                                    "type": "string",
+                                                    "example": "php /Users/ogg/www/whell-laravel/artisan schedule:run >> /Users/ogg/www/whell-laravel/storage/logs/job/crontab.log 2>&1"
+                                                },
+                                                "comments": {
+                                                    "description": "备注",
+                                                    "type": "string",
+                                                    "example": "BurnHall scheduler Job 5ff1a4511eaaf5.95269349"
+                                                },
+                                                "shortCut": {
+                                                    "description": "shortCut",
+                                                    "type": "string",
+                                                    "example": null
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
                     }
                 }
+            },
+            "post": {
+                "tags": [
+                    "定时任务脚本"
+                ],
+                "summary": "刷新定时任务脚本",
+                "description": "刷新定时任务脚本",
+                "operationId": "App\\Http\\Controllers\\Api\\Admin\\System\\CrontabController::create",
+                "parameters": [
+                    {
+                        "name": "accept",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/components/schemas/accept"
+                        }
+                    },
+                    {
+                        "name": "enforce",
+                        "in": "query",
+                        "description": "是否强制刷新",
+                        "schema": {
+                            "type": "bool",
+                            "default": "false"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "返回结果",
+                        "content": {
+                            "text/html": {
+                                "schema": {
+                                    "description": "成功状态 1刷新成功 0刷新失败",
+                                    "type": "integer",
+                                    "example": 1
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/admin/system/job/{id}": {
+            "get": {
+                "tags": [
+                    "定时任务"
+                ],
+                "summary": "查询定时任务",
+                "description": "查询定时任务",
+                "operationId": "App\\Http\\Controllers\\Api\\Admin\\System\\JobController::get",
+                "parameters": [
+                    {
+                        "name": "accept",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/components/schemas/accept"
+                        }
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "定时任务id",
+                        "required": true,
+                        "schema": {
+                            "type": "int"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "返回结果",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/JobData"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "tags": [
+                    "定时任务"
+                ],
+                "summary": "修改定时任务状态",
+                "description": "修改定时任务状态",
+                "operationId": "App\\Http\\Controllers\\Api\\Admin\\System\\JobController::modify",
+                "parameters": [
+                    {
+                        "name": "accept",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/components/schemas/accept"
+                        }
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "定时任务id",
+                        "required": true
+                    },
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "description": "当前状态",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "返回结果",
+                        "content": {
+                            "text/html": {
+                                "schema": {
+                                    "description": "成功状态 1刷新成功 0刷新失败",
+                                    "type": "integer",
+                                    "example": 1
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/admin/system/job": {
+            "get": {
+                "tags": [
+                    "定时任务"
+                ],
+                "summary": "查询定时任务列表",
+                "description": "查询定时任务列表",
+                "operationId": "App\\Http\\Controllers\\Api\\Admin\\System\\JobController::search",
+                "parameters": [
+                    {
+                        "name": "accept",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/components/schemas/accept"
+                        }
+                    },
+                    {
+                        "name": "conditions",
+                        "in": "query",
+                        "description": "条件",
+                        "schema": {
+                            "properties": {
+                                "name": {
+                                    "description": "名称",
+                                    "type": "string"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    },
+                    {
+                        "name": "offset",
+                        "in": "query",
+                        "description": "从第几个开始取",
+                        "schema": {
+                            "type": "int",
+                            "default": "0"
+                        }
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "取几个",
+                        "schema": {
+                            "type": "int",
+                            "default": "20"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "返回结果",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "properties": {
+                                                "": {
+                                                    "$ref": "#/components/schemas/JobData"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "paging": {
+                                            "$ref": "#/components/schemas/paging"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/admin/system/job_log": {
+            "get": {
+                "tags": [
+                    "定时任务日志"
+                ],
+                "summary": "查询定时任务日志列表",
+                "description": "查询定时任务日志列表",
+                "operationId": "App\\Http\\Controllers\\Api\\Admin\\System\\JobLogController::search",
+                "parameters": [
+                    {
+                        "name": "accept",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/components/schemas/accept"
+                        }
+                    },
+                    {
+                        "name": "jobId",
+                        "in": "query",
+                        "description": "任务id",
+                        "required": true
+                    },
+                    {
+                        "name": "offset",
+                        "in": "query",
+                        "description": "从第几个开始取",
+                        "schema": {
+                            "type": "int",
+                            "default": "0"
+                        }
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "取几个",
+                        "schema": {
+                            "type": "int",
+                            "default": "20"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "返回结果",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "properties": {
+                                                "": {
+                                                    "$ref": "#/components/schemas/JobLogData"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "paging": {
+                                            "$ref": "#/components/schemas/paging"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/admin/system/verification_code": {
+            "get": {
+                "tags": [
+                    "验证码"
+                ],
+                "summary": "登陆验证码",
+                "description": "登陆验证码",
+                "operationId": "App\\Http\\Controllers\\Api\\Admin\\System\\VerificationCodeController::search",
+                "parameters": [
+                    {
+                        "name": "config",
+                        "in": "query",
+                        "description": "验证码配置",
+                        "schema": {
+                            "type": "string",
+                            "default": "flat"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "返回结果",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "sensitive": {
+                                            "description": "是否开启严格模式",
+                                            "type": "bool",
+                                            "example": false
+                                        },
+                                        "key": {
+                                            "description": "验证码key",
+                                            "type": "string",
+                                            "example": "eyJpdiI6ImZvbUlmRUJKajFhVDdCS3gyNHo..."
+                                        },
+                                        "img": {
+                                            "description": "验证码base64",
+                                            "type": "string",
+                                            "example": "data:image/png;base64,iVBORw0KGg..."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/admin/user/group/{id}": {
+            "get": {
+                "tags": [
+                    "用户组"
+                ],
+                "summary": "获取用户组",
+                "description": "获取用户组",
+                "operationId": "App\\Http\\Controllers\\Api\\Admin\\User\\GroupController::get",
+                "parameters": [
+                    {
+                        "name": "accept",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/components/schemas/accept"
+                        }
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "用户组id",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "返回结果",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "0": {
+                                            "$ref": "#/components/schemas/GroupData"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "用户组"
+                ],
+                "summary": "删除用户组",
+                "description": "删除用户组",
+                "operationId": "App\\Http\\Controllers\\Api\\Admin\\User\\GroupController::delete",
+                "parameters": [
+                    {
+                        "name": "accept",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/components/schemas/accept"
+                        }
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "用户组id",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "返回结果",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "description": "成功状态 1成功 0失败",
+                                    "type": "integer",
+                                    "example": 1
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/admin/user/group": {
+            "get": {
+                "tags": [
+                    "用户组"
+                ],
+                "summary": "获取用户组列表",
+                "description": "获取用户组列表",
+                "operationId": "App\\Http\\Controllers\\Api\\Admin\\User\\GroupController::search",
+                "parameters": [
+                    {
+                        "name": "accept",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/components/schemas/accept"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "返回结果",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "0": {
+                                            "$ref": "#/components/schemas/GroupData"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "用户组"
+                ],
+                "summary": "更新用户组",
+                "description": "更新用户组",
+                "operationId": "App\\Http\\Controllers\\Api\\Admin\\User\\GroupController::update",
+                "parameters": [
+                    {
+                        "name": "accept",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/components/schemas/accept"
+                        }
+                    },
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "description": "用户组名称",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "rules",
+                        "in": "query",
+                        "description": "用户组规则",
+                        "required": true,
+                        "schema": {
+                            "type": "object"
+                        }
+                    },
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "description": "状态 1启用 0禁用",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "返回结果",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "description": "成功状态 1成功 0失败",
+                                    "type": "integer",
+                                    "example": 1
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "用户组"
+                ],
+                "summary": "创建用户组",
+                "description": "创建用户组",
+                "operationId": "App\\Http\\Controllers\\Api\\Admin\\User\\GroupController::create",
+                "parameters": [
+                    {
+                        "name": "accept",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/components/schemas/accept"
+                        }
+                    },
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "description": "用户组名称",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "rules",
+                        "in": "query",
+                        "description": "用户组规则",
+                        "required": true,
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "返回结果",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "description": "成功状态 1成功 0失败",
+                                    "type": "integer",
+                                    "example": 1
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "JobData": {
+                "properties": {
+                    "id": {
+                        "description": "id",
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "name": {
+                        "description": "名称",
+                        "type": "string",
+                        "example": "testJob1"
+                    },
+                    "expression": {
+                        "description": "任务执行表达式",
+                        "type": "string",
+                        "example": "*\\1 * * * *"
+                    },
+                    "class": {
+                        "description": "执行任务类名",
+                        "type": "string",
+                        "example": "App\\Models\\Job\\Job\\TestJob"
+                    },
+                    "args": {
+                        "description": "参数",
+                        "type": "string",
+                        "example": "[]"
+                    },
+                    "nextExecutionTime": {
+                        "description": "下次执行时间",
+                        "type": "string",
+                        "example": "2021-03-01 16:23:00"
+                    },
+                    "lastExecutionTime": {
+                        "description": "上次执行时间",
+                        "type": "string",
+                        "example": null
+                    },
+                    "status": {
+                        "description": "状态 1启用 0禁用",
+                        "type": "integer",
+                        "example": 1
+                    }
+                },
+                "type": "object"
+            },
+            "JobLogData": {
+                "properties": {
+                    "id": {
+                        "description": "id",
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "parentId": {
+                        "description": "任务id",
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "args": {
+                        "description": "参数",
+                        "type": "string",
+                        "example": "[]"
+                    },
+                    "resulted": {
+                        "description": "任务执行结果 1成功 0失败",
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "trace": {
+                        "description": "异常信息",
+                        "type": "string",
+                        "example": "执行失败:test error:SQLSTATE[HY000]: General error: 1364 Field 'trace' doesn't have a default value (SQL: insert into `job_log` (`parentId`, `name`, `expression`, `class`, `args`, `resulted`, `costTime`, `createTime`) values (1, test, *\\1 * * * *, App\\Models\\Job\\Job\\TestJob, [], 1, 0.016108989715576, 2020-12-15 20:46:07))line:671file:/Users/ogg/www/whell-laravel/vendor/laravel/framework/src/Illuminate/Database/Connection.php"
+                    },
+                    "costTime": {
+                        "description": "执行花费时间",
+                        "type": "string",
+                        "example": "0.029523849487305"
+                    },
+                    "createTime": {
+                        "description": "任务开始执行时间",
+                        "type": "string",
+                        "example": "2021-01-03T10:43:01.000000Z"
+                    },
+                    "name": {
+                        "description": "任务名称",
+                        "type": "string",
+                        "example": "testJob1"
+                    },
+                    "expression": {
+                        "description": "任务执行表达式",
+                        "type": "string",
+                        "example": "*\\1 * * * *"
+                    },
+                    "class": {
+                        "description": "执行任务类名",
+                        "type": "string",
+                        "example": "App\\Models\\Job\\Job\\TestJob"
+                    }
+                },
+                "type": "object"
+            },
+            "GroupData": {
+                "properties": {
+                    "id": {
+                        "description": "id",
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "name": {
+                        "description": "名称",
+                        "type": "string",
+                        "example": "group1"
+                    },
+                    "status": {
+                        "description": "状态 1启用 0禁用",
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "rules": {
+                        "description": "规则",
+                        "type": "array",
+                        "items": {
+                            "type": "string",
+                            "example": "Index"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "accept": {
+                "default": "application/whell.api+json"
+            },
+            "paging": {
+                "properties": {
+                    "total": {
+                        "description": "总数",
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "offset": {
+                        "description": "从第几个开始取",
+                        "type": "integer",
+                        "example": 0
+                    },
+                    "limit": {
+                        "description": "取了几个",
+                        "type": "integer",
+                        "example": 20
+                    }
+                },
+                "type": "object"
             }
         }
     },

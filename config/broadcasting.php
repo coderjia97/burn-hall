@@ -6,7 +6,6 @@
  */
 
 return [
-
     /*
     |--------------------------------------------------------------------------
     | Default Broadcaster
@@ -34,7 +33,6 @@ return [
     */
 
     'connections' => [
-
         'pusher' => [
             'driver' => 'pusher',
             'key' => env('PUSHER_APP_KEY'),
@@ -58,7 +56,5 @@ return [
         'null' => [
             'driver' => 'null',
         ],
-
     ],
-
 ];

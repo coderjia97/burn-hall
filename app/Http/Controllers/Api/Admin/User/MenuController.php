@@ -11,6 +11,7 @@ class MenuController extends Controller
     public function get()
     {
         $guid = $this->getCurrentUser()->getGuid();
+
         return $this->getUserService()->getUserJurisdiction($guid);
     }
 

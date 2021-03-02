@@ -55,14 +55,14 @@ class UserServiceImpl extends BaseService implements UserService
 
         $data['salt'] = CharTools::getRandChar(16);
         $data['guid'] = CharTools::generateGuid();
-        $data['password'] = Hash::make(sha1(md5($data['salt'] . config('app.salt') . $data['password']) . $data['salt']));
+        $data['password'] = Hash::make(sha1(md5($data['salt'].config('app.salt').$data['password']).$data['salt']));
         $data['isAdmin'] = self::IS_ADMIN_FALSE;
         $data['status'] = self::STATUS_TRUE;
         $data['createUserId'] = $this->getCurrentUser()->getId();
         $data['updateUserId'] = $this->getCurrentUser()->getId();
 
         $this->getUserDao()->create($data);
-        $this->getLogService()->createTrace('创建:用户' . $data['name'], $data);
+        $this->getLogService()->createTrace('创建:用户'.$data['name'], $data);
 
         return true;
     }
@@ -93,12 +93,12 @@ class UserServiceImpl extends BaseService implements UserService
 
         $data = ArrayTools::parts($data, ['name', 'email', 'password', 'salt', 'group', 'status']);
         if (!empty($data['password'])) {
-            $data['password'] = Hash::make(sha1(md5($data['salt'] . config('app.salt') . $data['password']) . $data['salt']));
+            $data['password'] = Hash::make(sha1(md5($data['salt'].config('app.salt').$data['password']).$data['salt']));
         }
         $data['updateUserId'] = $this->getCurrentUser()->getId();
 
         $this->getUserDao()->where('guid', $guid)->update($data);
-        $this->getLogService()->createTrace('修改:用户' . $guid, $data);
+        $this->getLogService()->createTrace('修改:用户'.$guid, $data);
 
         return true;
     }
@@ -130,7 +130,7 @@ class UserServiceImpl extends BaseService implements UserService
         }
 
         $result = $this->getUserDao()->where('guid', $guid)->update([$type => $value]);
-        $this->getLogService()->createTrace('修改状态:用户' . $guid, [$type => $value]);
+        $this->getLogService()->createTrace('修改状态:用户'.$guid, [$type => $value]);
 
         return $result;
     }
@@ -163,7 +163,7 @@ class UserServiceImpl extends BaseService implements UserService
             throw new \InvalidArgumentException('用户不存在');
         }
 
-        $isCheck = Hash::check(sha1(md5($userInfo['salt'] . config('app.salt') . $data['password']) . $userInfo['salt']), $userInfo['password']);
+        $isCheck = Hash::check(sha1(md5($userInfo['salt'].config('app.salt').$data['password']).$userInfo['salt']), $userInfo['password']);
         if (!$isCheck) {
 //            throw new \InvalidArgumentException('用户名称不存在或密码有误');
         }
@@ -180,7 +180,7 @@ class UserServiceImpl extends BaseService implements UserService
             'token' => $token,
             'menus' => $menus,
             'name' => $userInfo['name'],
-        ],);
+        ], );
     }
 
     protected function filterData($data): array
@@ -216,7 +216,7 @@ class UserServiceImpl extends BaseService implements UserService
         $newConditions = [];
 
         if (!empty($conditions['name'])) {
-            $newConditions[] = ['name', 'like', '%' . $conditions['name'] . '%'];
+            $newConditions[] = ['name', 'like', '%'.$conditions['name'].'%'];
         }
 
         return $newConditions;

@@ -18,7 +18,7 @@ use Illuminate\Http\Request;
 class LoginController extends Controller
 {
     /**
-     * @ResponseFilter(class="\App\Http\Controllers\Api\Admin\User\Filter\LoginFilter", mode="simple")
+     * @ResponseFilter(class=\App\Http\Controllers\Api\Admin\User\Filter\LoginFilter::class, mode="simple")
      */
     public function create(Request $request)
     {

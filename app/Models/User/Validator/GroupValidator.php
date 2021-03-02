@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Models\User\Validator;
-
 
 use App\Models\BaseValidator;
 

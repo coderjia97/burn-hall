@@ -36,7 +36,7 @@ class GroupServiceImpl extends BaseService implements GroupService
         $data['updateUserId'] = $this->getCurrentUser()->getId();
 
         $this->getGroupDao()->create($data);
-        $this->getLogService()->createTrace('创建:用户组 name:' . $data['name'], $data);
+        $this->getLogService()->createTrace('创建:用户组 name:'.$data['name'], $data);
 
         return true;
     }
@@ -59,7 +59,7 @@ class GroupServiceImpl extends BaseService implements GroupService
         $data['updateUserId'] = $this->getCurrentUser()->getId();
 
         $this->getGroupDao()->where('id', $id)->update($data);
-        $this->getLogService()->createTrace('修改:用户组 id:' . $id, $data);
+        $this->getLogService()->createTrace('修改:用户组 id:'.$id, $data);
 
         return true;
     }
@@ -90,7 +90,7 @@ class GroupServiceImpl extends BaseService implements GroupService
         $conditions = ArrayTools::removeNull($conditions);
 
         if (!empty($conditions['name'])) {
-            $newConditions[] = ['name', 'like', '%' . $conditions['name'] . '%'];
+            $newConditions[] = ['name', 'like', '%'.$conditions['name'].'%'];
         }
 
         return $newConditions;
