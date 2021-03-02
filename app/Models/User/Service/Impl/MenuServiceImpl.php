@@ -10,7 +10,7 @@ class MenuServiceImpl extends BaseService implements MenuService
 {
     public function searchMenu()
     {
-        return Yaml::parseFile(config_path() . '/menu.yaml');
+        return Yaml::parseFile(config_path().'/menu.yaml');
     }
 
     public function getUserMenu($roleData, $menu = [])

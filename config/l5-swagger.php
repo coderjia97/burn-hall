@@ -5,7 +5,7 @@ return [
     'documentations' => [
         'default' => [
             'api' => [
-                'title' => 'L5 Swagger UI',
+                'title' => env('APP_NAME', 'whell-laravel').'-ApiDocumentation',
             ],
 
             'routes' => [
@@ -36,7 +36,6 @@ return [
                 'annotations' => [
                     base_path('app'),
                 ],
-
             ],
         ],
     ],
@@ -196,8 +195,8 @@ return [
         /*
          * Uncomment to add constants which can be used in annotations
          */
-        // 'constants' => [
-        // 'L5_SWAGGER_CONST_HOST' => env('L5_SWAGGER_CONST_HOST', 'http://my-default-host.com'),
-        // ],
+        'constants' => [
+            'BASE_URL' => env('APP_URL', 'http://www.whell-laravel.com'),
+        ],
     ],
 ];

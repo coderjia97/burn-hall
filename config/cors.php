@@ -6,7 +6,6 @@
  */
 
 return [
-
     /*
     |--------------------------------------------------------------------------
     | Cross-Origin Resource Sharing (CORS) Configuration
@@ -35,5 +34,4 @@ return [
     'max_age' => 0,
 
     'supports_credentials' => false,
-
 ];

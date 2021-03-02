@@ -9,8 +9,6 @@ namespace App\Models\User\Dao\Impl;
 
 use App\Models\BaseDao;
 use App\Models\User\Dao\RefreshToken;
-use App\Models\User\Dao\UserDao;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class RefreshTokenDaoImpl extends BaseDao implements RefreshToken
 {

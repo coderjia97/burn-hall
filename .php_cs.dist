@@ -7,6 +7,7 @@ $finder = Symfony\Component\Finder\Finder::create()
     ->ignoreVCS(true)
     ->exclude('vendor')
     ->exclude('bin')
+    ->exclude('storage')
     ->in(__DIR__.'/app')
 ;
 

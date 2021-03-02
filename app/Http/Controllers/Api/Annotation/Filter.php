@@ -9,16 +9,16 @@ abstract class Filter
     /**
      * 简化模式
      */
-    const SIMPLE_MODE = 'simple';
+    public const SIMPLE_MODE = 'simple';
 
     protected $mode = self::SIMPLE_MODE;
 
-    public function setMode($mode)
+    public function setMode($mode): void
     {
         $this->mode = $mode;
     }
 
-    public function filter($data)
+    public function filter($data): ?array
     {
         if (!$data) {
             return null;
@@ -37,7 +37,7 @@ abstract class Filter
         return $data;
     }
 
-    public function filters(&$dataSet)
+    public function filters(&$dataSet): ?array
     {
         if (!$dataSet) {
             return null;

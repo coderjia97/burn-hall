@@ -30,6 +30,7 @@ class Handler extends ExceptionHandler
             [],
             JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES
         );
+
         return parent::render($request, $exception);
     }
 }

@@ -14,7 +14,7 @@ class ArrayTools extends App
      * 2019/10/31 By:Ogg
      *
      * @param bool $strictMode true 严格模式 判断是否为null|''|0
-     * @param bool $tips true 提示某个字段不存在
+     * @param bool $tips       true 提示某个字段不存在
      *
      * @return array|bool
      */
@@ -146,7 +146,7 @@ class ArrayTools extends App
             if (!array_key_exists($key, $array)) {
                 return false;
             }
-            if ($strictMode && (is_null($array[$key]) || $array[$key] === '' || $array[$key] === 0)) {
+            if ($strictMode && (is_null($array[$key]) || '' === $array[$key] || 0 === $array[$key])) {
                 return false;
             }
         }

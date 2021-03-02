@@ -118,14 +118,14 @@ class JobServiceImpl extends BaseService implements JobService
         return $this->getJobDao()->where('id', $id)->update(['status' => $status]);
     }
 
-    public function searchByPagination($conditions)
+    public function searchByPagination($conditions): array
     {
         $conditions = $this->prepareConditions($conditions);
 
         return $this->getJobDao()->searchByPagination($conditions);
     }
 
-    protected function prepareConditions($conditions)
+    protected function prepareConditions($conditions): array
     {
         $conditions = ArrayTools::removeNull($conditions);
         $newConditions = [];
